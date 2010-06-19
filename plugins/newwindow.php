@@ -47,7 +47,7 @@ function __new_window_init_js($dummy) {
 
 if (isset($_REQUEST['nwjs'])) {
 	 require_once('../core.php');
-	 rss_bootstrap(false,'$Revision$',24);
+	 rss_bootstrap(false,'$Revision: 1023 $',24);
     require_once('../init.php');
     
     ?>

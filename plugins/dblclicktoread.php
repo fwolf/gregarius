@@ -59,7 +59,7 @@ function __dblclickToRead_init_js($dummy) {
 
 if (isset($_REQUEST['dcljs'])) {
 	 require_once('../core.php');
-	 rss_bootstrap(false,'$Revision$',0);
+	 rss_bootstrap(false,'$Revision: 1790 $',0);
     require_once('../init.php');
 
 
