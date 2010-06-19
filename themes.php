@@ -179,7 +179,8 @@ function isMobileDevice() {
 
 
             // if none of those matched, let's have a gander at grabbing the resolution...
-            if (!$ret && eregi( "([0-9]{3})x([0-9]{3})", $ua, $matches ) ) {
+//            if (!$ret && eregi( "([0-9]{3})x([0-9]{3})", $ua, $matches ) ) {
+            if (!$ret && preg_match('/([0-9]{3})x([0-9]{3})/i', $ua, $matches ) ) {
                 if ($matches[1]<600 || $matches[2]<600) {
                     $ret = true; //one of the screen dimensions is less than 600 - we'll call it a mobile device
                 }
