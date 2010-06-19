@@ -44,6 +44,7 @@ class MysqliDB extends DB {
 		
 		if (class_exists('mysqli')) {
 			$this -> _db = new mysqli($dbserver, $dbuname, $dbpass);
+			$this -> _db -> query('set names utf8');
 		} else {
 			$this -> _db = false;
 		}

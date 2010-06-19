@@ -49,6 +49,7 @@ class MysqlDB extends DB {
 					 ."<p>Have you edited dbinit.php and correctly defined "
 					 ."the database username and password?</p>\n" );		  
 		}
+		mysql_query('set names utf8');
 	}
 	
 	function DBSelectDB($dbname) {
