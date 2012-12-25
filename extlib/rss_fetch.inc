@@ -56,14 +56,14 @@ define ('MAGPIE_FEED_ORIGIN_HTTP_403', 128);
  * CONSTANTS - redefine these in your script to change the
  * behaviour of fetch_rss() currently, most options effect the cache
  *
- * MAGPIE_CACHE_ON - Should Magpie cache parsed RSS objects? 
- * For me a built in cache was essential to creating a "PHP-like" 
+ * MAGPIE_CACHE_ON - Should Magpie cache parsed RSS objects?
+ * For me a built in cache was essential to creating a "PHP-like"
  * feel to Magpie, see rss_cache.inc for rationale
  *
  *
  * MAGPIE_CACHE_DIR - Where should Magpie cache parsed RSS objects?
- * This should be a location that the webserver can write to.   If this 
- * directory does not already exist Mapie will try to be smart and create 
+ * This should be a location that the webserver can write to.   If this
+ * directory does not already exist Mapie will try to be smart and create
  * it.  This will often fail for permissions reasons.
  *
  *
@@ -79,20 +79,20 @@ define ('MAGPIE_FEED_ORIGIN_HTTP_403', 128);
 
 
 /*=======================================================================*\
-    Function: fetch_rss: 
+    Function: fetch_rss:
     Purpose:  return RSS object for the give url
               maintain the cache
     Input:    url of RSS file
     Output:   parsed RSS object (see rss_parse.inc)
- 
-    NOTES ON CACHEING:  
+
+    NOTES ON CACHEING:
     If caching is on (MAGPIE_CACHE_ON) fetch_rss will first check the cache.
-    
+
     NOTES ON RETRIEVING REMOTE FILES:
     If conditional gets are on (MAGPIE_CONDITIONAL_GET_ON) fetch_rss will
     return a cached object, and touch the cache object upon recieving a
     304.
-    
+
     NOTES ON FAILED REQUESTS:
     If there is an HTTP error while fetching an RSS object, the cached
     version will be return, if it exists (and if MAGPIE_CACHE_FRESH_ONLY is off)
@@ -307,7 +307,7 @@ function magpie_error ($errormsg="") {
     Purpose:    retrieve an arbitrary remote file
     Input:      url of the remote file
                 headers to send along with the request (optional)
-    Output:     an HTTP response object (see Snoopy.class.inc)  
+    Output:     an HTTP response object (see Snoopy.class.inc)
 \*=======================================================================*/
 function _fetch_remote_file ($url, $headers = "" ) {
     // Snoopy is an HTTP client in PHP
@@ -443,9 +443,9 @@ function init () {
     HTTP STATUS CODE PREDICATES
     These functions attempt to classify an HTTP status code
     based on RFC 2616 and RFC 2518.
-    
+
     All of them take an HTTP status code as input, and return true or false
- 
+
     All this code is adapted from LWP's HTTP::Status.
 \*=======================================================================*/
 
