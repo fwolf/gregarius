@@ -49,4 +49,7 @@ define ('DBSERVER', 'localhost');
 //
 //define ('DB_TABLE_PREFIX','');
 
+// Proxy define, comment to disable proxy
+//define('PROXY_HOST', 'localhost');
+//define('PROXY_PORT', 8087);
 ?>

@@ -315,6 +315,15 @@ function _fetch_remote_file ($url, $headers = "" ) {
     $client->agent = MAGPIE_USER_AGENT;
     $client->read_timeout = MAGPIE_FETCH_TIME_OUT;
     $client->use_gzip = MAGPIE_USE_GZIP;
+
+	if (defined('PROXY_HOST')) {
+		// Proxy is enabled
+		$client->proxy_host = PROXY_HOST;
+		$client->proxy_port = PROXY_PORT;
+		$client->_isproxy = true;
+		$client->read_timeout = 0;	// Some proxy is slow
+	}
+
     if (is_array($headers) ) {
         $client->rawheaders = $headers;
     }
