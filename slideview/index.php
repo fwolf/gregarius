@@ -28,7 +28,7 @@ class IdxRoot extends Controler {
 	 * User call starter function
 	 */
 	public function Go() {
-		require P2R . 'v-slide.php';
+		$this->ViewDisp(P2R . 'v-slide.php');
 	} // end of func Go
 
 

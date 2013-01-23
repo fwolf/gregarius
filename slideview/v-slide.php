@@ -31,11 +31,34 @@ class ViewSlide extends View {
 		unset($this->oGr);
 		parent::__construct($ctl);
 
-		// Assign js
+		// Assign css, js
+		$this->aCss[] = array(P2R . 'tpl/loader/default.css.php', 'all');
 		$this->aJs['JSON-js'] = '/js/json2.js';
 		$this->aJs['jquery'] = '/js/jquery.js';
 
+		if (empty($this->sAction))
+			$this->sAction = 'default';
+
 	} // end of func __construct
+
+
+	/**
+	 * Gen page default
+	 *
+	 * @return	string
+	 */
+	public function GenDefault () {
+	} // end of func GenDefault
+
+
+	/**
+	 * Gen menu: empty
+	 *
+	 * @return	string
+	 */
+	public function GenMenu () {
+		return null;
+	} // end of func GenMenu
 
 
 	/**
@@ -56,7 +79,20 @@ class ViewSlide extends View {
 	 */
 	protected function NewObjTpl() {
 		$o_smarty = new SmartyFl();
+
+		$o_smarty->setTemplateDir(array(
+			'default'	=> 'tpl',
+		));
+		$o_smarty->setCompileDir(sys_get_temp_dir());
+		$o_smarty->setCacheDir(sys_get_temp_dir());
+
+
 		$o_smarty->assign('P2R', P2R);
+		$o_smarty->assign('global', array(
+			'css'	=> &$this->aCss,
+			'js'	=> &$this->aJs,
+		));
+
 		return $o_smarty;
 	} // end of func NewObjTpl
 
