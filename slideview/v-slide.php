@@ -48,6 +48,7 @@ class ViewSlide extends View {
 	 * @return	string
 	 */
 	public function GenDefault () {
+		return $this->oTpl->fetch('slideview.tpl');
 	} // end of func GenDefault
 
 
