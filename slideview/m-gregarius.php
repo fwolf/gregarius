@@ -1,6 +1,7 @@
 <?php
 require_once FWOLFLIB . 'class/mvc-module.php';
 require_once FWOLFLIB . 'class/adodb.php';
+require P2R . '../constants.php';
 
 
 /**
@@ -24,7 +25,7 @@ class Gregarius extends Module {
 		parent::__construct($view);
 
 		// Read some data from config.php
-		$this->iPageSize = GetCfg('system.pagesize');
+		$this->iPageSize = $this->GetCfg('rss.output.frontpage.numitems');
 
 	} // end of func __construct
 
@@ -61,6 +62,91 @@ class Gregarius extends Module {
 
 
 	/**
+	 * Get Gregarius config
+	 *
+	 * @param	string	$key
+	 * @return	mixed
+	 */
+	public function GetCfg ($key) {
+		if (empty($key))
+			return null;
+		$rs = $this->oDb->ExecuteGenSql(array(
+			'SELECT'	=> array(
+				'v'	=> 'value_',
+				'type_',
+			),
+			'FROM'		=> $this->aCfg['tbl_prefix'] . 'config',
+			'WHERE'		=> array(
+				'"' . $key . '" = key_',
+			),
+		));
+		if (!empty($rs) && !$rs->EOF) {
+			if ('array' == $rs->fields['type_'])
+				return unserialize($rs->fields['v']);
+			else
+				return $rs->fields['v'];
+		}
+		else
+			return null;
+	} // end of func GetCfg
+
+
+	/**
+	 * Get Gregarius item list
+	 *
+	 * @param	array	$ar_cfg
+	 * @return	array
+	 */
+	public function GetItemList ($ar_cfg = array()) {
+		// Treat config param
+		if (empty($ar_cfg['pagesize']))
+			$ar_cfg['pagesize'] =
+				$this->GetCfg('rss.output.frontpage.numitems');
+
+		$ar_sql = array(
+			'SELECT'	=> array(
+				'i.id',
+//				'i.added',
+				'i.title',
+				'i.url',
+				'i.description',
+				'i.unread',
+				'i.pubdate',
+			),
+			'FROM'		=> array(
+				'i'	=> $this->aCfg['tbl_prefix'] . 'item',
+				'c'	=> $this->aCfg['tbl_prefix'] . 'channels',
+			),
+			'WHERE'		=> array(
+				'i.cid = c.id',
+				// Unread only
+				RSS_MODE_UNREAD_STATE . ' & i.unread',
+				// Not deleted
+				'NOT (' . RSS_MODE_DELETED_STATE . ' & i.unread)',
+				// Channel not deprecated
+				'NOT (' . RSS_MODE_DELETED_STATE . ' & c.mode)',
+			),
+			'ORDERBY'	=> 'i.pubdate DESC',
+			'LIMIT'		=> $ar_cfg['pagesize'],
+		);
+		$ar_sql = array_merge($ar_sql, $ar_cfg);
+
+		$rs = $this->oDb->ExecuteGenSql($ar_sql);
+		if (empty($rs) || $rs->EOF)
+			return null;
+		else {
+			// Adodb::GetAssoc() will got useless numberic index
+			$ar = array();
+			while (!$rs->EOF) {
+				$ar[$rs->fields['id']] = $rs->GetRowAssoc(false);
+				$rs->MoveNext();
+			}
+			return $ar;
+		}
+	} // end of func GetItemList
+
+
+	/**
 	 * Set default config.
 	 *
 	 * @return	object
@@ -82,7 +168,10 @@ class Gregarius extends Module {
 		);
 
 		// Other const may use later:
-		// DB_TABLE_PREFIX
+		if (defined('DB_TABLE_PREFIX'))
+			$this->aCfg['tbl_prefix'] = DB_TABLE_PREFIX;
+		else
+			$this->aCfg['tbl_prefix'] = '';
 
 		return $this;
 	 } // end of func SetCfgDefault

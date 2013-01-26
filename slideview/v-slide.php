@@ -43,6 +43,19 @@ class ViewSlide extends View {
 
 
 	/**
+	 * Ajax: get item list
+	 */
+	public function AjaxItemList () {
+		$ar = $this->oGr->GetItemList(array(
+			'start'		=> GetGet('start', 0),
+			'pagesize'	=> GetGet('pagesize', 0),
+		));
+		echo JsonEncodeUnicode($ar);
+		exit(0);
+	} // end of func AjaxItemList
+
+
+	/**
 	 * Gen page default
 	 *
 	 * @return	string
@@ -92,6 +105,9 @@ class ViewSlide extends View {
 		$o_smarty->assign('global', array(
 			'css'	=> &$this->aCss,
 			'js'	=> &$this->aJs,
+		));
+		$o_smarty->assign('gr', array(
+			'pagesize'	=> $this->oGr->GetCfg('rss.output.frontpage.numitems'),
 		));
 
 		return $o_smarty;
