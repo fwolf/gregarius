@@ -6,6 +6,13 @@
 	<h1>Gregarius SlideViw Mode</h1>
 	<div>
 		Hotkey: f/j/Right=Next, a/k/Left=Prev, d/Del=Mark Readed and Next, s=Star item
+	<div id='item_counter'>
+		<span id='item_counter_prev'>0</span>
+		|
+		<span id='item_cur_id'></span>
+		|
+		<span id='item_counter_next'>0</span>
+	</div>
 	</div>
 </nav>
 
@@ -20,12 +27,24 @@ var o_items = {
 	i_min: 0,	/* Usually largest id */
 	i_max: 0,	/* Usually smallest id */
 	i_cur: 0,
+	i_cnt: 0,
+	i_cnt_prev: 0,
+	i_cnt_next: 0,
 
 	/* Add item to page */
 	ItemAdd: function(item) {
 		$('#item_container').append('\
 			<article id="article_' + item.id + '">\
-				<h2>' + item.title + '</h2>\
+				<h2>\
+					<a href="' + item.url + '">'
+					+ item.title + '</a>\
+				</h2>\
+				<div>\
+					<a href="{$P2R}../feed.php?channel=' + item.c_id + '">'
+						+ item.c_title + '</a>\
+					Posted: ' + item.pubdate + '\
+				</div>\
+				<section>' + item.description + '</section>\
 			</article>\
 		');
 		/* Change item index */
@@ -33,7 +52,12 @@ var o_items = {
 			this.i_min = item.id;
 			this.i_cur = item.id;
 		}
+		else {
+			o_items.i_cnt_next ++;
+		}
 		o_items.i_max = item.id;
+		o_items.i_cnt ++;
+		o_items.RefreshCounter();
 	},
 
 	/* Load item from db */
@@ -61,7 +85,17 @@ var o_items = {
 			$.each(ar_item, function (i, item) {
 				o_items.ItemAdd(item);
 			});
+			/* Show cur item */
+			$('#article_' + o_items.i_cur).show();
 		});
+	},
+
+
+	/* Refresh prev/next item counter */
+	RefreshCounter: function () {
+		$('#item_counter_prev').text(o_items.i_cnt_prev);
+		$('#item_counter_next').text(o_items.i_cnt_next);
+		$('#item_cur_id').text(o_items.i_cur);
 	}
 }
 

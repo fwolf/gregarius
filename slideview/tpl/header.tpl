@@ -34,8 +34,34 @@
 		-moz-border-radius: 0 0 0.7em 0.7em;
 		border-radius: 0 0 0.7em 0.7em;
 	}
+	#item_counter {
+		display: inline;
+		float: right;
+		margin-right: 0.5em;
+		margin-top: -1.4em;
+	}
+
 	#item_container {
 		margin-top: 3em;
+	}
+	#item_container h2 {
+		display: block;
+		font-size: 1.2em;
+		line-height: 1.2em;
+		margin: 0.2em;
+		padding-top: 0.5em;
+	}
+	article {
+		/*visibility: hidden;*/
+		display: none;
+		margin: auto;
+		width: 70%;
+	}
+	article section {
+		text-align: left;
+	}
+	p, li {
+		line-height: 1.5;
 	}
 	/*]]>*/
 	</style>

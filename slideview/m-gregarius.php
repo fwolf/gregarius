@@ -112,6 +112,9 @@ class Gregarius extends Module {
 				'i.description',
 				'i.unread',
 				'i.pubdate',
+				'c_id'		=> 'c.id',
+				'c_title'	=> 'c.title',
+				'c_siteurl'	=> 'c.siteurl',
 			),
 			'FROM'		=> array(
 				'i'	=> $this->aCfg['tbl_prefix'] . 'item',
