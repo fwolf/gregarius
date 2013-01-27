@@ -106,12 +106,12 @@ class Gregarius extends Module {
 		$ar_sql = array(
 			'SELECT'	=> array(
 				'i.id',
-//				'i.added',
+				'i.added',
 				'i.title',
 				'i.url',
 				'i.description',
 				'i.unread',
-				'i.pubdate',
+				'pubdate'	=> 'i.pubdate',
 				'c_id'		=> 'c.id',
 				'c_title'	=> 'c.title',
 				'c_siteurl'	=> 'c.siteurl',
@@ -129,7 +129,7 @@ class Gregarius extends Module {
 				// Channel not deprecated
 				'NOT (' . RSS_MODE_DELETED_STATE . ' & c.mode)',
 			),
-			'ORDERBY'	=> 'i.pubdate DESC',
+			'ORDERBY'	=> 'IFNULL(i.pubdate, i.added) DESC',
 			'LIMIT'		=> $ar_cfg['pagesize'],
 		);
 		$ar_sql = array_merge($ar_sql, $ar_cfg);
@@ -141,7 +141,10 @@ class Gregarius extends Module {
 			// Adodb::GetAssoc() will got useless numberic index
 			$ar = array();
 			while (!$rs->EOF) {
-				$ar[$rs->fields['id']] = $rs->GetRowAssoc(false);
+				// Use item.id as array index will cause sort problem
+				// when JSON.parse(), so not assign index,
+				// the result keep native order same with db query.
+				$ar[] = $rs->GetRowAssoc(false);
 				$rs->MoveNext();
 			}
 			return $ar;

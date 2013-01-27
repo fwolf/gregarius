@@ -42,7 +42,9 @@ var o_items = {
 				<div>\
 					<a href="{$P2R}../feed.php?channel=' + item.c_id + '">'
 						+ item.c_title + '</a>\
-					Posted: ' + item.pubdate + '\
+					' + ((null == item.pubdate) ? '\
+						Fetched: ' + item.added : '\
+						Posted: ' + item.pubdate) + '\
 				</div>\
 				<section>' + item.description + '</section>\
 			</article>\
@@ -76,13 +78,8 @@ var o_items = {
 			}
 		}).done(function (msg) {
 			/* JSON.parse() will reverse item order (by key/item.id asc, */
-			/* So reverse them back before each loop. */
-			var ar_item = [];
+			/* So data is not index by item.id anymore. */
 			$.each(JSON.parse(msg), function (i, item) {
-				ar_item.unshift(item);
-			});
-			/* Loop add item to page */
-			$.each(ar_item, function (i, item) {
 				o_items.ItemAdd(item);
 			});
 			/* Show cur item */
