@@ -42,6 +42,9 @@
 <!-- -->
 /* Item operation */
 var o_items = {
+	/* Config vars */
+	i_pagesize : {$gr.pagesize},
+	i_slide_speed : 200,	/* Duration in animate() */
 	/* Loaded item info */
 	i_min : 0,	/* Usually largest id */
 	i_max : 0,	/* Usually smallest id */
@@ -49,7 +52,8 @@ var o_items = {
 	i_cnt : 0,
 	i_cnt_prev : 0,
 	i_cnt_next : 0,
-	i_slide_speed : 200,	/* Duration in animate() */
+	/* Prevent duplicate load to same content */
+	ar_loading : [],
 
 
 	/* Hide an article to dir */
@@ -91,6 +95,19 @@ var o_items = {
 	},
 
 
+	/* Check to load new or destory old items */
+	CheckLoadDestory : function () {
+		/* Load */
+		if (this.i_pagesize >= this.i_cnt_next) {
+			/* Check first avoid dup loading */
+			if (-1 == this.ar_loading.indexOf(this.i_max)) {
+				this.ar_loading.push(this.i_max);
+				this.Load(this.i_max, this.i_pagesize);
+			}
+		}
+	},
+
+
 	/* Add item to page */
 	ItemAdd : function (item) {
 		$('#item_container').append('\
@@ -117,6 +134,10 @@ var o_items = {
 		else {
 			this.i_cnt_next ++;
 		}
+		/* Remove i_max from loading and assign new id to it */
+		var i = this.ar_loading.indexOf(this.i_max);
+		if (-1 != i)
+			this.ar_loading.splice(i, 1);
 		this.i_max = item.id;
 		this.i_cnt ++;
 		this.RefreshCounter();
@@ -129,7 +150,7 @@ var o_items = {
 		if ('undefined' == typeof(i_start))
 			i_start = this.i_max;
 		if ('undefined' == typeof(i_num))
-			i_num = {$gr.pagesize};
+			i_num = this.i_pagesize;
 		$.ajax({
 			type : 'GET',
 			url : '?a=ajax-item-list',
@@ -164,6 +185,8 @@ var o_items = {
 		this.i_cnt_prev ++;
 		this.i_cnt_next --;
 		this.RefreshCounter();
+
+		this.CheckLoadDestory();
 	},
 
 

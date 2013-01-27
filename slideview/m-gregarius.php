@@ -129,9 +129,14 @@ class Gregarius extends Module {
 				// Channel not deprecated
 				'NOT (' . RSS_MODE_DELETED_STATE . ' & c.mode)',
 			),
-			'ORDERBY'	=> 'IFNULL(i.pubdate, i.added) DESC',
+			// Same with original Gr, but not good for find start point below
+//			'ORDERBY'	=> 'IFNULL(i.pubdate, i.added) DESC',
+			// Order by id is more simple
+			'ORDERBY'	=> 'i.id DESC',
 			'LIMIT'		=> $ar_cfg['pagesize'],
 		);
+		if (!empty($ar_cfg['start']))
+			$ar_sql['WHERE'][] = 'i.id < ' . $ar_cfg['start'];
 		$ar_sql = array_merge($ar_sql, $ar_cfg);
 
 		$rs = $this->oDb->ExecuteGenSql($ar_sql);
