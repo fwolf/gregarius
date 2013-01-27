@@ -46,8 +46,8 @@ var o_items = {
 	i_pagesize : {$gr.pagesize},
 	i_slide_speed : 200,	/* Duration in animate() */
 	/* Loaded item info */
-	i_min : 0,	/* Usually largest id */
-	i_max : 0,	/* Usually smallest id */
+	i_min : 0,	/* Usually smallest id, appear later */
+	i_max : 0,	/* Usually largest id, appear earlier */
 	i_cur : 0,
 	i_cnt : 0,
 	i_cnt_prev : 0,
@@ -100,9 +100,9 @@ var o_items = {
 		/* Load */
 		if (this.i_pagesize >= this.i_cnt_next) {
 			/* Check first avoid dup loading */
-			if (-1 == this.ar_loading.indexOf(this.i_max)) {
-				this.ar_loading.push(this.i_max);
-				this.Load(this.i_max, this.i_pagesize);
+			if (-1 == this.ar_loading.indexOf(this.i_min)) {
+				this.ar_loading.push(this.i_min);
+				this.Load(this.i_min, this.i_pagesize);
 			}
 		}
 		/* Remove old item */
@@ -110,7 +110,7 @@ var o_items = {
 			/* :TODO: Remove readed item only */
 			var i = this.i_cnt_prev - this.i_pagesize;
 			if (0 == i)
-				this.i_min = $('#item_container article')
+				this.i_max = $('#item_container article')
 					.eq(1).attr('id').substring(8);
 			$('#item_container article').eq(i).remove();
 			this.i_cnt --;
@@ -138,18 +138,18 @@ var o_items = {
 			</article>\
 		');
 		/* Change item index */
-		if (0 == this.i_min) {
-			this.i_min = item.id;
+		if (0 == this.i_max) {
+			this.i_max = item.id;
 			this.i_cur = item.id;
 		}
 		else {
 			this.i_cnt_next ++;
 		}
-		/* Remove i_max from loading and assign new id to it */
-		var i = this.ar_loading.indexOf(this.i_max);
+		/* Remove i_min from loading and assign new id to it */
+		var i = this.ar_loading.indexOf(this.i_min);
 		if (-1 != i)
 			this.ar_loading.splice(i, 1);
-		this.i_max = item.id;
+		this.i_min = item.id;
 		this.i_cnt ++;
 		this.RefreshCounter();
 	},
@@ -159,7 +159,7 @@ var o_items = {
 	Load : function (i_start, i_num) {
 		/* Param default value */
 		if ('undefined' == typeof(i_start))
-			i_start = this.i_max;
+			i_start = this.i_min;
 		if ('undefined' == typeof(i_num))
 			i_num = this.i_pagesize;
 		$.ajax({
@@ -183,7 +183,7 @@ var o_items = {
 
 	/* Scroll to Next item */
 	Next : function () {
-		if (this.i_cur == this.i_max)
+		if (this.i_cur == this.i_min)
 			return;
 
 		/* Hide cur item, show next */
@@ -205,8 +205,8 @@ var o_items = {
 	NextItemId : function (i_cur) {
 		if ('undefined' == typeof(i_cur))
 			i_cur = this.i_cur;
-		if (i_cur == this.i_max)
-			return this.i_max;
+		if (i_cur == this.i_min)
+			return this.i_min;
 		/* Get next item id by html article id */
 		return $('#article_' + i_cur).next('article').attr('id')
 			.substring(8);
@@ -215,7 +215,7 @@ var o_items = {
 
 	/* Scroll to Prev item */
 	Prev : function () {
-		if (this.i_cur == this.i_min)
+		if (this.i_cur == this.i_max)
 			return;
 
 		/* Hide cur item, show prev */
@@ -235,8 +235,8 @@ var o_items = {
 	PrevItemId : function (i_cur) {
 		if ('undefined' == typeof(i_cur))
 			i_cur = this.i_cur;
-		if (i_cur == this.i_min)
-			return this.i_min;
+		if (i_cur == this.i_max)
+			return this.i_max;
 		/* Get prev item id by html article id */
 		return $('#article_' + i_cur).prev('article').attr('id')
 			.substring(8);
