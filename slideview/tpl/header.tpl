@@ -23,6 +23,7 @@
 		position: fixed;
 		top: 0;
 		width: 100%;
+		z-index: 999;
 	}
 	#nav {
 		background-color: #70DBFF;
@@ -62,9 +63,9 @@
 		margin: 0.2em;
 	}
 	article {
-		/*visibility: hidden;*/
 		display: none;
 		margin: auto;
+		position: relative;
 		width: 70%;
 	}
 	article section {
