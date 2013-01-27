@@ -16,6 +16,11 @@
 	p, li {
 		line-height: 1.5;
 	}
+	/* Force display vertical scrollbar */
+	html {
+		overflow: -moz-scrollbars-vertical;
+		overflow-y: scroll;
+	}
 
 	/* Nav bar */
 	nav {
