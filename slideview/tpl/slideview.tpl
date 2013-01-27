@@ -55,12 +55,13 @@ var o_items = {
 			this.i_cur = item.id;
 		}
 		else {
-			o_items.i_cnt_next ++;
+			this.i_cnt_next ++;
 		}
-		o_items.i_max = item.id;
-		o_items.i_cnt ++;
-		o_items.RefreshCounter();
+		this.i_max = item.id;
+		this.i_cnt ++;
+		this.RefreshCounter();
 	},
+
 
 	/* Load item from db */
 	Load: function (i_start, i_num) {
@@ -88,19 +89,71 @@ var o_items = {
 	},
 
 
+	/* Scroll to Next item */
+	Next: function () {
+		console.log('next');
+	},
+
+
+	/* Scroll to Prev item */
+	Prev: function () {
+		console.log('prev');
+	},
+
+
+	/* Set cur item Readed and Next */
+	ReadAndNext: function () {
+		console.log('read and next');
+	},
+
+
 	/* Refresh prev/next item counter */
 	RefreshCounter: function () {
-		$('#item_counter_prev').text(o_items.i_cnt_prev);
-		$('#item_counter_next').text(o_items.i_cnt_next);
-		$('#item_cur_id').text(o_items.i_cur);
+		$('#item_counter_prev').text(this.i_cnt_prev);
+		$('#item_counter_next').text(this.i_cnt_next);
+		$('#item_cur_id').text(this.i_cur);
+	},
+
+
+	/* Toggle item Readed */
+	ToggleReaded: function () {
+		console.log('toggle readed');
+	},
+
+
+	/* Toggle item Stared */
+	ToggleStared: function () {
+		console.log('toggle stared');
 	}
 }
 
 
+/* Bind keys */
+$(window).keydown(function (evt) {
+	// Next: f/j/Right
+	if (-1 != [70, 74, 39].indexOf(evt.keyCode)) {
+		o_items.Next();
+	}
+	// Prev: a/k/Left
+	else if (-1 != [65, 75, 37].indexOf(evt.keyCode)) {
+		o_items.Prev();
+	}
+	// Mark Readed and Next: d/Del
+	else if (-1 != [68, 46].indexOf(evt.keyCode)) {
+		o_items.ReadAndNext();
+	}
+	// Toggle item Stared: s
+	else if (-1 != [83].indexOf(evt.keyCode)) {
+		o_items.ToggleStared();
+	}
+	// Toggle item Readed: u
+	else if (-1 != [85].indexOf(evt.keyCode)) {
+		o_items.ToggleReaded();
+	}
+});
+
+
 /* Load items */
 o_items.Load();
-setTimeout(function () {
-	console.log(JSON.stringify(o_items, null, 2));
-}, 2000);
 //]]>
 </script>
