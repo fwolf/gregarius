@@ -105,6 +105,17 @@ var o_items = {
 				this.Load(this.i_max, this.i_pagesize);
 			}
 		}
+		/* Remove old item */
+		if (this.i_pagesize <= this.i_cnt_prev) {
+			/* :TODO: Remove readed item only */
+			var i = this.i_cnt_prev - this.i_pagesize;
+			if (0 == i)
+				this.i_min = $('#item_container article')
+					.eq(1).attr('id').substring(8);
+			$('#item_container article').eq(i).remove();
+			this.i_cnt --;
+			this.i_cnt_prev --;
+		}
 	},
 
 
