@@ -3,18 +3,36 @@
 *}
 
 <nav>
-	<h1>Gregarius SlideViw Mode</h1>
-	<div>
-		Hotkey: f/j/Right=Next, a/k/Left=Prev, d/Del=Mark Readed and Next, s=Star item
-	<div id='item_counter'>
-		<span id='item_counter_prev'>0</span>
-		|
-		<span id='item_cur_id'></span>
-		|
-		<span id='item_counter_next'>0</span>
-	</div>
+	<div id='nav'>
+		<div id='item_counter'>
+			<span id='item_counter_prev'>0</span>
+			|
+			<span id='item_cur_id'></span>
+			|
+			<span id='item_counter_next'>0</span>
+		</div>
+		<h1>Gregarius SlideViw Mode</h1>
+		<div id='hotkey'>
+			Key:
+				f/j/Right=Next,
+				a/k/Left=Prev,
+				d/Del=Mark Readed and Next,
+				s=Stared(T),
+				u=Readed(T)
+		</div>
 	</div>
 </nav>
+
+<div id='hotkey_shadow'>
+	<br /> {* Simulate h1 *}
+			Key:
+				f/j/Right=Next,
+				a/k/Left=Prev,
+				d/Del=Mark Readed and Next,
+				s=Stared(T),
+				u=Readed(T)
+</div>
+
 
 <div id='item_container'>
 </div>
@@ -22,6 +40,7 @@
 <script type='text/javascript'>
 //<![CDATA[
 <!-- -->
+/* Item operation */
 var o_items = {
 	/* Loaded item info */
 	i_min: 0,	/* Usually largest id */
@@ -30,6 +49,7 @@ var o_items = {
 	i_cnt: 0,
 	i_cnt_prev: 0,
 	i_cnt_next: 0,
+
 
 	/* Add item to page */
 	ItemAdd: function(item) {
