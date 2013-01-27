@@ -149,12 +149,50 @@ class Gregarius extends Module {
 				// Use item.id as array index will cause sort problem
 				// when JSON.parse(), so not assign index,
 				// the result keep native order same with db query.
-				$ar[] = $rs->GetRowAssoc(false);
+				$ar_t = $rs->GetRowAssoc(false);
+
+				// Convert flag column
+				$ar_t['stared'] = intval($ar_t['unread'])
+					& RSS_MODE_STICKY_STATE;
+
+				$ar[] = $ar_t;
 				$rs->MoveNext();
 			}
 			return $ar;
 		}
 	} // end of func GetItemList
+
+
+	/**
+	 * Toggle item stared
+	 *
+	 * @param	int		$id
+	 * @return	array
+	 */
+	public function ItemToggleStared ($id) {
+		if (empty($id))
+			return null;
+
+		// Retrieve data
+		$i_unread = $this->oDb->GetDataByPk($this->aCfg['tbl_prefix'] . 'item'
+			, $id, 'unread', 'id');
+		if (is_null($i_unread))
+			return null;
+
+		// Toggle
+		$i_unread = $i_unread ^ RSS_MODE_STICKY_STATE;
+
+		// Save
+		$ar = array(
+			'id'		=> $id,
+			'unread'	=> $i_unread,
+		);
+		$this->oDb->Write($this->aCfg['tbl_prefix'] . 'item'
+			, $ar, 'U');
+
+		$ar['stared'] = $ar['unread'] & RSS_MODE_STICKY_STATE;
+		return $ar;
+	} // end of func ItemToggleStared
 
 
 	/**

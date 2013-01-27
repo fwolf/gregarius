@@ -137,6 +137,11 @@ var o_items = {
 				<section>' + item.description + '</section>\
 			</article>\
 		');
+
+		/* Attach class to new added item */
+		if (0 != item.stared)
+			$('#article_' + item.id).addClass('stared');
+
 		/* Change item index */
 		if (0 == this.i_max) {
 			this.i_max = item.id;
@@ -265,7 +270,32 @@ var o_items = {
 
 	/* Toggle item Stared */
 	ToggleStared : function () {
-		console.log('toggle stared');
+		/* Avoid duplicate run */
+		var s = 'toggle_stared_' + this.i_cur;
+		if (-1 != this.ar_loading.indexOf(s))
+			return;
+		/* Add to loading ar */
+		this.ar_loading.push(s);
+
+		$.ajax({
+			type : 'GET',
+			url : '?a=ajax-item-toggle-stared',
+			data : {
+				id : this.i_cur
+			}
+		}).done(function (msg) {
+			msg = JSON.parse(msg);
+			/* Remove from loading ar */
+			var i = o_items.ar_loading.indexOf('toggle_stared_' + msg.id);
+			if (-1 != i)
+				o_items.ar_loading.splice(i, 1);
+
+			/* Modify article attribute */
+			if (0 != msg.stared)
+				$('#article_' + msg.id).addClass('stared');
+			else
+				$('#article_' + msg.id).removeClass('stared');
+		});
 	}
 }
 

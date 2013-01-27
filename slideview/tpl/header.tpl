@@ -77,6 +77,10 @@
 		margin-top: 0.8em;
 		text-align: left;
 	}
+	/* Stared and Readed */
+	article.stared {
+		border: 1px solid red;
+	}
 	/*]]>*/
 	</style>
 
