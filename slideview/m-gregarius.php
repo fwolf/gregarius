@@ -118,6 +118,36 @@ class Gregarius extends Module {
 
 
 	/**
+	 * Fix invalid html
+	 *
+	 * @param	string	$s_html
+	 * @return	string
+	 */
+	public function HtmlFix ($s_html) {
+		if (empty($s_html))
+			return '';
+
+		// Use inner class DOMDocument
+		if (class_exists('DOMDocument')) {
+			static $o_dom = null;
+			if (is_null($o_dom))
+				$o_dom = new DOMDocument;
+			$s_header = '<html><head>
+				<meta http-equiv="Content-Type"
+					content="text/html; charset=UTF-8" />
+			';
+			$o_dom->loadHTML($s_header . $s_html);
+			$s_rs = $o_dom->saveXML();
+			// Remove uselsss part
+			$s_rs = substr($s_rs, 256);
+			$s_rs = substr($s_rs, 0, -15);
+		}
+
+		return $s_rs;
+	} // end of func HtmlFix
+
+
+	/**
 	 * Get Gregarius item list
 	 *
 	 * @param	array	$ar_cfg
@@ -171,11 +201,6 @@ class Gregarius extends Module {
 		else {
 			// Adodb::GetAssoc() will got useless numberic index
 			$ar = array();
-			$o_dom = new DOMDocument;
-			$s_header = '<html><head>
-				<meta http-equiv="Content-Type"
-					content="text/html; charset=UTF-8" />
-			';
 			while (!$rs->EOF) {
 				// Use item.id as array index will cause sort problem
 				// when JSON.parse(), so not assign index,
@@ -187,12 +212,7 @@ class Gregarius extends Module {
 					& RSS_MODE_STICKY_STATE;
 
 				// Purify html in description
-				// Add head meta encoding, to output with currect encoding
-				$o_dom->loadHTML($s_header . $ar_t['description']);
-				$ar_t['description'] = $o_dom->saveXML();
-				// Remove uselsss part
-				$ar_t['description'] = substr($ar_t['description'], 256);
-				$ar_t['description'] = substr($ar_t['description'], 0, -15);
+				$ar_t['description'] = $this->HtmlFix($ar_t['description']);
 
 				$ar[] = $ar_t;
 				$rs->MoveNext();
