@@ -99,9 +99,10 @@ var o_items = {
 	CheckLoadDestory : function () {
 		/* Load */
 		if (this.i_pagesize >= this.i_cnt_next) {
+			var s = 'load_from_' + this.i_min;
 			/* Check first avoid dup loading */
-			if (-1 == this.ar_loading.indexOf(this.i_min)) {
-				this.ar_loading.push(this.i_min);
+			if (this.LoadingCheck(s)) {
+				this.LoadingAdd(s);
 				this.Load(this.i_min, this.i_pagesize);
 			}
 		}
@@ -151,9 +152,7 @@ var o_items = {
 			this.i_cnt_next ++;
 		}
 		/* Remove i_min from loading and assign new id to it */
-		var i = this.ar_loading.indexOf(this.i_min);
-		if (-1 != i)
-			this.ar_loading.splice(i, 1);
+		this.LoadingDel('load_from_' + this.i_min);
 		this.i_min = item.id;
 		this.i_cnt ++;
 		this.RefreshCounter();
@@ -183,6 +182,26 @@ var o_items = {
 			/* Show cur item */
 			$('#article_' + o_items.i_cur).show();
 		});
+	},
+
+
+	/* Add entry to loading array */
+	LoadingAdd : function (key) {
+		this.ar_loading.push(key);
+	},
+
+
+	/* Check if key in loading array */
+	LoadingCheck : function (key) {
+		return (-1 == this.ar_loading.indexOf(key));
+	},
+
+
+	/* Del entry in loading array */
+	LoadingDel : function (key) {
+		var i = this.ar_loading.indexOf(key);
+		if (-1 != i)
+			this.ar_loading.splice(i, 1);
 	},
 
 
@@ -272,10 +291,9 @@ var o_items = {
 	ToggleStared : function () {
 		/* Avoid duplicate run */
 		var s = 'toggle_stared_' + this.i_cur;
-		if (-1 != this.ar_loading.indexOf(s))
+		if (!this.LoadingCheck(s))
 			return;
-		/* Add to loading ar */
-		this.ar_loading.push(s);
+		this.LoadingAdd(s);
 
 		$.ajax({
 			type : 'GET',
@@ -286,9 +304,7 @@ var o_items = {
 		}).done(function (msg) {
 			msg = JSON.parse(msg);
 			/* Remove from loading ar */
-			var i = o_items.ar_loading.indexOf('toggle_stared_' + msg.id);
-			if (-1 != i)
-				o_items.ar_loading.splice(i, 1);
+			o_items.LoadingDel('toggle_stared_' + msg.id);
 
 			/* Modify article attribute */
 			if (0 != msg.stared)
