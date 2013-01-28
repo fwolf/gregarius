@@ -14,11 +14,12 @@
 		<h1>Gregarius SlideViw Mode</h1>
 		<div id='hotkey'>
 			Key:
-				f/j/Right=Next,
-				a/k/Left=Prev,
-				d/Del=Mark Readed and Next,
-				s=Stared(T),
-				u=Readed(T)
+				<a href='javascript: o_items.Next();'>f/j/Right=Next</a>,
+				<a href='javascript: o_items.Prev();'>a/k/Left=Prev</a>,
+				<a href='javascript: o_items.ReadAndNext();'>
+					d/Del=Mark Readed and Next</a>,
+				<a href='javascript: o_items.ToggleStared();'>s=Stared(T)</a>,
+				<a href='javascript: o_items.ToggleReaded();'>u=Readed(T)</a>
 		</div>
 	</div>
 </nav>
