@@ -33,7 +33,7 @@ class NavItem {
     var $accessKey = null;
     var $isActive = false;
     var $loc;
-    
+
     function NavItem($href,$label,$loc) {
         $this->href = $href;
         $this->label = $label;
@@ -45,7 +45,7 @@ class NavItem {
             $this->isActive=true;
         }
     }
-    
+
     function render() {
         $GLOBALS['rss'] -> currentNavItem = &$this;
         rss_require(RSS::getTemplateFile("navitem.php"), false);
@@ -53,28 +53,30 @@ class NavItem {
 }
 
 class Navigation {
-    
+
     var $items = array();
     var $postRender = "";
-    
+
     function Navigation() {
-    
+
         $this->appendNavItem(getPath(),__('<span>H</span>ome'),LOCATION_HOME);
         if (!getConfig("rss.config.restrictrefresh")) {
         	$this->appendNavItem(getPath().'update.php',__('<span>R</span>efresh'),LOCATION_UPDATE);
         }
         $this->appendNavItem(getPath().'search.php',__('<span>S</span>earch'),LOCATION_SEARCH);
         $this->appendNavItem(getPath().'admin/',__('A<span>d</span>min'),LOCATION_ADMIN);
-        
+		$this->appendNavItem(getPath() . 'slideview/'
+			, __('Slide<span>V</span>iew'), LOCATION_ABOUT + 1);
+
         if (($an = rss_plugin_hook('rss.plugins.afternav', null)) != null) {
         	$this -> postRender .= $an;
         }
-        
+
         $GLOBALS['rss']->nav = $this;
         rss_plugin_hook('rss.plugins.navelements', null);
     }
-        
-        
+
+
     function appendNavItem($url,$label,$loc = null) {
         $this->items[] = new NavItem($url,$label,$loc);
     }
@@ -84,7 +86,7 @@ class Navigation {
         $this->appendNavItem($url,$label,$loc);
         $this->items[] = $item;
     }
-    
+
 	function render() {
 		rss_require(RSS::getTemplateFile("nav.php"));
   	}
