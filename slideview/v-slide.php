@@ -36,6 +36,14 @@ class ViewSlide extends View {
 		$this->aJs['JSON-js'] = '/js/json2.js';
 		$this->aJs['jquery'] = '/js/jquery.js';
 
+		// Check auth
+		$s = GetCookie(RSS_USER_COOKIE);
+		if (empty($s) || !$this->oGr->AuthCheck($s)) {
+			// No auth or auth data validate fail
+			// Show login form
+			$this->sAction = 'login';
+		}
+
 		if (empty($this->sAction))
 			$this->sAction = 'default';
 
@@ -86,6 +94,20 @@ class ViewSlide extends View {
 	public function GenDefault () {
 		return $this->oTpl->fetch('slideview.tpl');
 	} // end of func GenDefault
+
+
+	/**
+	 * Gen log form
+	 *
+	 * @return	string
+	 */
+	public function GenLogin () {
+		$s = '
+			Please login to Administrator through
+			<a href="../">main page</a>.
+		';
+		return $s;
+	} // end of func GenLogin
 
 
 	/**

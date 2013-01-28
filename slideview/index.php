@@ -9,6 +9,8 @@ if (!class_exists('Smarty'))
 	die('Smarty v3 needed, put it\'s libs/ dir under include path
 		and rename to \'smarty\'.');
 require_once FWOLFLIB . 'class/mvc-controler.php';
+// Include Gregarius file
+require_once P2R . '../constants.php';
 
 
 /**

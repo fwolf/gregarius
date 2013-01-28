@@ -1,7 +1,6 @@
 <?php
 require_once FWOLFLIB . 'class/mvc-module.php';
 require_once FWOLFLIB . 'class/adodb.php';
-require P2R . '../constants.php';
 
 
 /**
@@ -28,6 +27,33 @@ class Gregarius extends Module {
 		$this->iPageSize = $this->GetCfg('rss.output.frontpage.numitems');
 
 	} // end of func __construct
+
+
+	/**
+	 * Check auth data in cookie
+	 *
+	 * @param	string	$s_cookie
+	 * @return	boolean
+	 */
+	public function AuthCheck ($s_cookie) {
+		if (empty($s_cookie))
+			return false;
+
+		$ar = explode('|', $s_cookie);
+		if (2 != count($ar))
+			return false;
+
+		$ar_db = $this->oDb->GetDataByPk(
+			$this->aCfg['tbl_prefix'] . 'users'
+			, $ar[0], array('password', 'ulevel'), 'uname');
+
+		if (empty($ar_db)
+			|| 99 != $ar_db['ulevel']
+			|| md5($ar[1]) != $ar_db['password'])
+			return false;
+
+		return true;
+	} // end of func AuthCheck
 
 
 	/**

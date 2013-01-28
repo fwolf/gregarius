@@ -13,7 +13,7 @@
 	/*<![CDATA[*/
 	/* Write CSS below */
 	/* Global */
-	p, li {
+	li, p, td {
 		line-height: 1.5;
 	}
 	/* Force display vertical scrollbar */

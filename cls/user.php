@@ -33,7 +33,7 @@ define ('RSS_USER_ACTION_SESSION',0x04);
 define ('RSS_USER_ACTION_LOGOUT',0x08);
 
 /**
- * The RSSUser class holds all the business logic to handle Gregarius users 
+ * The RSSUser class holds all the business logic to handle Gregarius users
  */
 class RSSUser {
     /** Userid */
@@ -55,13 +55,13 @@ class RSSUser {
 
     /**
      * RSSUser constructor:
-     * Handles: 
+     * Handles:
      * -logout
      * -cookie login (with validation)
      * -login
      */
     function RSSUser() {
-    
+
         $this -> _uid = 0;
         $this -> _validIPs = array();
         $this -> _level = RSS_USER_LEVEL_NOLEVEL;
@@ -69,21 +69,21 @@ class RSSUser {
         $this -> _realName = '';
         $this -> _hash = null;
 				$this -> _showPrivate = 0;
-        
-        
-		$this -> _mobileSession = 
+
+
+		$this -> _mobileSession =
 			isset($_POST['media']) && 'mobile' == $_POST['media'];
-		
+
 		if ('mobile' ==  getThemeMedia()) {
 			@ini_set('session.use_trans_sid',true);
 			session_start();
 		}
-				
+
         if (array_key_exists('logout',$_GET)) {
             $this -> logout();
             rss_redirect('');
         }
-				
+
         $cuname = $chash = null;
         if (isset($_POST['username']) && isset($_POST['password'])) {
             $_cuname = trim($_POST['username']);
@@ -131,7 +131,7 @@ class RSSUser {
     /**
      * Logs in a user given the username and password.
      * If the user provided valid username and password,
-     * he is given a cookie and his IP address subnet is added 
+     * he is given a cookie and his IP address subnet is added
      * to the list of valid IPs this user is allowed to log in
      * via a cookie
      *
@@ -184,7 +184,7 @@ class RSSUser {
 		function setUserSession($user,$hash) {
 			$_SESSION['mobile'] = $user . "|" . $hash;
 		}
-		
+
     /**
      * Logs the user out.
      * - deletes the cookie
@@ -235,6 +235,6 @@ class RSSUser {
 		}
 }
 
-// Create the unique instance. 
+// Create the unique instance.
 $GLOBALS['rssuser'] = new RSSUser();
 ?>
