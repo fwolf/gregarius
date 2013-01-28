@@ -127,8 +127,27 @@ class Gregarius extends Module {
 		if (empty($s_html))
 			return '';
 
+		// Use htmLawed
+		if (function_exists('htmLawed')) {
+			$s_rs = htmLawed($s_html, array(
+				// Allow dynamic CSS expression
+				'css_expression'	=> 1,
+				'style_pass'		=> 1,
+				// Not strict to lower attribute value
+				'lc_std_val'		=> 0,
+				// Not remove tag non-strict in XHTML
+				'make_tag_strict'	=> 0,
+				// Allow all schemes
+				'schemes'			=> '*',
+				// 1tab for indent, \n for line break
+				'tidy'				=> '1t1n',
+				// Not Check id for unique
+				'unique_ids'		=> 0,
+			));
+		}
+
 		// Use inner class DOMDocument
-		if (class_exists('DOMDocument')) {
+		elseif (class_exists('DOMDocument')) {
 			static $o_dom = null;
 			if (is_null($o_dom))
 				$o_dom = new DOMDocument;

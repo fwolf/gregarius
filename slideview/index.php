@@ -11,6 +11,8 @@ if (!class_exists('Smarty'))
 require_once FWOLFLIB . 'class/mvc-controler.php';
 // Include Gregarius file
 require_once P2R . '../constants.php';
+// Include htmLawed class if exists in include_path
+@include_once 'htmLawed/htmLawed.php';
 
 
 /**
