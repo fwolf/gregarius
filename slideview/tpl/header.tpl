@@ -78,6 +78,9 @@
 		text-align: left;
 	}
 	/* Stared and Readed */
+	article.readed h2 {
+		text-decoration: line-through;
+	}
 	article.stared {
 		border: 1px solid red;
 	}

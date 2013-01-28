@@ -142,6 +142,8 @@ var o_items = {
 		/* Attach class to new added item */
 		if (0 != item.stared)
 			$('#article_' + item.id).addClass('stared');
+		if (0 == item.readed)
+			$('#article_' + item.id).addClass('readed');
 
 		/* Change item index */
 		if (0 == this.i_max) {
@@ -283,7 +285,29 @@ var o_items = {
 
 	/* Toggle item Readed */
 	ToggleReaded : function () {
-		console.log('toggle readed');
+		/* Avoid duplicate run */
+		var s = 'toggle_readed_' + this.i_cur;
+		if (!this.LoadingCheck(s))
+			return;
+		this.LoadingAdd(s);
+
+		$.ajax({
+			type : 'GET',
+			url : '?a=ajax-item-toggle-readed',
+			data : {
+				id : this.i_cur
+			}
+		}).done(function (msg) {
+			msg = JSON.parse(msg);
+			/* Remove from loading ar */
+			o_items.LoadingDel('toggle_readed_' + msg.id);
+
+			/* Modify article attribute */
+			if (0 == msg.readed)
+				$('#article_' + msg.id).addClass('readed');
+			else
+				$('#article_' + msg.id).removeClass('readed');
+		});
 	},
 
 

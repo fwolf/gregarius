@@ -56,6 +56,18 @@ class ViewSlide extends View {
 
 
 	/**
+	 * Ajax: toggle item readed
+	 */
+	public function AjaxItemToggleReaded () {
+		$ar = $this->oGr->ItemToggleReaded(GetGet('id')
+			, GetGet('unread', null));
+		if (!empty($ar))
+			echo JsonEncodeUnicode($ar);
+		exit(0);
+	} // end of func AjaxItemToggleReaded
+
+
+	/**
 	 * Ajax: toggle item stared
 	 */
 	public function AjaxItemToggleStared () {

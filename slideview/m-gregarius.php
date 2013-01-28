@@ -164,6 +164,44 @@ class Gregarius extends Module {
 
 
 	/**
+	 * Toggle item readed
+	 *
+	 * @param	int		$id
+	 * @param	int		$unread			Direct set to this value
+	 * @return	array
+	 */
+	public function ItemToggleReaded ($id, $unread = null) {
+		if (empty($id))
+			return null;
+
+		$ar = array(
+			'id'	=> $id,
+		);
+		// Retrieve data
+		$i_unread = $this->oDb->GetDataByPk(
+			$this->aCfg['tbl_prefix'] . 'item', $id, 'unread', 'id');
+		if (is_null($i_unread))
+			return null;
+
+		if (is_null($unread)) {
+			// Toggle
+			$ar['unread'] = $i_unread ^ RSS_MODE_UNREAD_STATE;
+		}
+		else {
+			// Set
+			$ar['unread'] = $i_unread & (SET_MODE_READ_STATE | $unread);
+		}
+
+		// Save
+		$this->oDb->Write($this->aCfg['tbl_prefix'] . 'item'
+			, $ar, 'U');
+
+		$ar['readed'] = $ar['unread'] & RSS_MODE_UNREAD_STATE;
+		return $ar;
+	} // end of func ItemToggleReaded
+
+
+	/**
 	 * Toggle item stared
 	 *
 	 * @param	int		$id
