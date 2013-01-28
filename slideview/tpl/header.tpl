@@ -16,6 +16,9 @@
 	li, p, td {
 		line-height: 1.5;
 	}
+	section {
+		text-indent: 2em;
+	}
 	/* Force display vertical scrollbar */
 	html {
 		overflow: -moz-scrollbars-vertical;
@@ -64,8 +67,9 @@
 	/* Items */
 	#item_container h2 {
 		font-size: 1.2em;
-		line-height: 1.2;
+		line-height: 1.4;
 		margin: 0.2em;
+		padding-top: 0.2em;
 	}
 	article {
 		display: none;
@@ -79,10 +83,17 @@
 	}
 	/* Stared and Readed */
 	article.readed h2 {
+		background-color: lightgray;
 		text-decoration: line-through;
 	}
-	article.stared {
-		border: 1px solid red;
+	article.stared h2 {
+		background-color: #70DBFF;
+	}
+	article.stared h2:before {
+		content: url('../plugins/stickyflag/sticky.png') " ";
+	}
+	article.stared h2:after {
+		content: " " url('../plugins/stickyflag/sticky.png');
 	}
 	/*]]>*/
 	</style>
