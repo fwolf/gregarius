@@ -97,7 +97,7 @@ class Gregarius extends Module {
 	 * @param	array	$ar_cfg
 	 * @return	array
 	 */
-	public function GetItemList ($ar_cfg = array()) {
+	public function ItemList ($ar_cfg = array()) {
 		// Treat config param
 		if (empty($ar_cfg['pagesize']))
 			$ar_cfg['pagesize'] =
@@ -160,7 +160,7 @@ class Gregarius extends Module {
 			}
 			return $ar;
 		}
-	} // end of func GetItemList
+	} // end of func ItemList
 
 
 	/**

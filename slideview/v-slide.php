@@ -46,7 +46,7 @@ class ViewSlide extends View {
 	 * Ajax: get item list
 	 */
 	public function AjaxItemList () {
-		$ar = $this->oGr->GetItemList(array(
+		$ar = $this->oGr->ItemList(array(
 			'start'		=> GetGet('start', 0),
 			'pagesize'	=> GetGet('pagesize', 0),
 		));
