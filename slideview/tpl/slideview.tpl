@@ -271,7 +271,9 @@ var o_items = {
 
 	/* Set cur item Readed and Next */
 	ReadAndNext : function () {
-		console.log('read and next');
+		var id = this.i_cur;
+		this.Next();
+		this.ToggleReaded(id, 0);
 	},
 
 
@@ -284,9 +286,18 @@ var o_items = {
 
 
 	/* Toggle item Readed */
-	ToggleReaded : function () {
+	ToggleReaded : function (id, unread) {
+		if ('undefined' == typeof(id))
+			id = this.i_cur;
+		if ('undefined' == typeof(unread))
+			// Toggle
+			var data = { id : id };
+		else
+			// Set
+			var data = { id : id, unread : unread };
+
 		/* Avoid duplicate run */
-		var s = 'toggle_readed_' + this.i_cur;
+		var s = 'toggle_readed_' + id;
 		if (!this.LoadingCheck(s))
 			return;
 		this.LoadingAdd(s);
@@ -294,9 +305,7 @@ var o_items = {
 		$.ajax({
 			type : 'GET',
 			url : '?a=ajax-item-toggle-readed',
-			data : {
-				id : this.i_cur
-			}
+			data : data
 		}).done(function (msg) {
 			msg = JSON.parse(msg);
 			/* Remove from loading ar */
@@ -312,9 +321,11 @@ var o_items = {
 
 
 	/* Toggle item Stared */
-	ToggleStared : function () {
+	ToggleStared : function (id) {
+		if ('undefined' == typeof(id))
+			id = this.i_cur;
 		/* Avoid duplicate run */
-		var s = 'toggle_stared_' + this.i_cur;
+		var s = 'toggle_stared_' + id;
 		if (!this.LoadingCheck(s))
 			return;
 		this.LoadingAdd(s);
@@ -323,7 +334,7 @@ var o_items = {
 			type : 'GET',
 			url : '?a=ajax-item-toggle-stared',
 			data : {
-				id : this.i_cur
+				id : id
 			}
 		}).done(function (msg) {
 			msg = JSON.parse(msg);
