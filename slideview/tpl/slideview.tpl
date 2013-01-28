@@ -286,6 +286,14 @@ var o_items = {
 	},
 
 
+	/* Scroll: PageUp */
+	ScrollPageUp : function () {
+		$(window).scrollTop($(window).scrollTop()
+			- (window.innerHeight || document.documentElement.offsetHeight)
+				* 0.875);
+	},
+
+
 	/* Toggle item Readed */
 	ToggleReaded : function (id, unread) {
 		if ('undefined' == typeof(id))
@@ -373,6 +381,10 @@ $(window).keydown(function (evt) {
 	// Toggle item Readed: u
 	else if (-1 != [85].indexOf(evt.keyCode)) {
 		o_items.ToggleReaded();
+	}
+	// Scroll: PageUp
+	else if (-1 != [66].indexOf(evt.keyCode)) {
+		o_items.ScrollPageUp();
 	}
 });
 
