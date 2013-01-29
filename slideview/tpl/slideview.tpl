@@ -11,7 +11,9 @@
 			|
 			<span id='item_counter_next'>0</span>
 		</div>
-		<h1>Gregarius SlideViw Mode</h1>
+		<h1>
+			<a href='../'title='Return to original Gregarius'>Gregarius</a>
+			SlideViw Mode</h1>
 		<div id='hotkey'>
 			Key:
 				<a href='javascript: o_items.Next();'>f/j/Right=Next</a>,
