@@ -57,6 +57,8 @@ var Items = {
 	i_cnt_next : 0,
 	/* Prevent duplicate load to same content */
 	ar_loading : [],
+	/* Array of items on page queue */
+	ar_items : [],
 
 
 	/* Hide an article to dir */
@@ -111,12 +113,16 @@ var Items = {
 		}
 		/* Remove old item */
 		if (this.i_pagesize <= this.i_cnt_prev) {
-			/* :TODO: Remove readed item only */
+			/* :THINK: Remove readed item only ? */
+			/* If so, i will not allways have value 0. */
 			var i = this.i_cnt_prev - this.i_pagesize;
 			if (0 == i)
-				this.i_max = $('#item_container article')
-					.eq(1).attr('id').substring(8);
-			$('#item_container article').eq(i).remove();
+				/* Only need re-set i_max when removing first item */
+				this.i_max = this.ar_items[1];
+			/* Remove from page */
+			$('#article_' + this.ar_items[i]).remove();
+			/* Remove from id array */
+			this.ar_items.splice(i, 1);
 			this.i_cnt --;
 			this.i_cnt_prev --;
 		}
@@ -149,6 +155,7 @@ var Items = {
 			$('#article_' + item.id).addClass('readed');
 
 		/* Change item index */
+		this.ar_items.push(item.id);
 		if (0 == this.i_max) {
 			this.i_max = item.id;
 			this.i_cur = item.id;
@@ -196,7 +203,7 @@ var Items = {
 	},
 
 
-	/* Check if key in loading array */
+	/* Check if key in loading array, return true if NOT in */
 	LoadingCheck : function (key) {
 		return (-1 == this.ar_loading.indexOf(key));
 	},
@@ -236,9 +243,8 @@ var Items = {
 			i_cur = this.i_cur;
 		if (i_cur == this.i_min)
 			return this.i_min;
-		/* Get next item id by html article id */
-		return $('#article_' + i_cur).next('article').attr('id')
-			.substring(8);
+		/* Get next item id by inner array */
+		return this.ar_items[this.ar_items.indexOf(i_cur) + 1];
 	},
 
 
@@ -266,9 +272,8 @@ var Items = {
 			i_cur = this.i_cur;
 		if (i_cur == this.i_max)
 			return this.i_max;
-		/* Get prev item id by html article id */
-		return $('#article_' + i_cur).prev('article').attr('id')
-			.substring(8);
+		/* Get prev item id by inner array */
+		return this.ar_items[this.ar_items.indexOf(i_cur) - 1];
 	},
 
 
