@@ -16,12 +16,12 @@
 			SlideViw Mode</h1>
 		<div id='hotkey'>
 			Key:
-				<a href='javascript: o_items.Prev();'>a/k/Left=Prev</a>,
-				<a href='javascript: o_items.Next();'>f/j/Right=Next</a>,
-				<a href='javascript: o_items.ReadAndNext();'>
+				<a href='javascript: Items.Prev();'>a/k/Left=Prev</a>,
+				<a href='javascript: Items.Next();'>f/j/Right=Next</a>,
+				<a href='javascript: Items.ReadAndNext();'>
 					d/Del=Mark Readed and Next</a>,
-				<a href='javascript: o_items.ToggleReaded();'>u=Readed(T)</a>
-				<a href='javascript: o_items.ToggleStared();'>s=Stared(T)</a>,
+				<a href='javascript: Items.ToggleReaded();'>u=Readed(T)</a>
+				<a href='javascript: Items.ToggleStared();'>s=Stared(T)</a>,
 		</div>
 	</div>
 </nav>
@@ -43,8 +43,8 @@
 <script type='text/javascript'>
 //<![CDATA[
 <!-- -->
-/* Item operation */
-var o_items = {
+/* Item operation object */
+var Items = {
 	/* Config vars */
 	i_pagesize : {$gr.pagesize},
 	i_slide_speed : 200,	/* Duration in animate() */
@@ -182,10 +182,10 @@ var o_items = {
 			/* JSON.parse() will reverse item order (by key/item.id asc, */
 			/* So data is not index by item.id anymore. */
 			$.each(JSON.parse(msg), function (i, item) {
-				o_items.ItemAdd(item);
+				Items.ItemAdd(item);
 			});
 			/* Show cur item */
-			$('#article_' + o_items.i_cur).show();
+			$('#article_' + Items.i_cur).show();
 		});
 	},
 
@@ -320,7 +320,7 @@ var o_items = {
 		}).done(function (msg) {
 			msg = JSON.parse(msg);
 			/* Remove from loading ar */
-			o_items.LoadingDel('toggle_readed_' + msg.id);
+			Items.LoadingDel('toggle_readed_' + msg.id);
 
 			/* Modify article attribute */
 			if (0 == msg.readed)
@@ -350,7 +350,7 @@ var o_items = {
 		}).done(function (msg) {
 			msg = JSON.parse(msg);
 			/* Remove from loading ar */
-			o_items.LoadingDel('toggle_stared_' + msg.id);
+			Items.LoadingDel('toggle_stared_' + msg.id);
 
 			/* Modify article attribute */
 			if (0 != msg.stared)
@@ -366,32 +366,32 @@ var o_items = {
 $(window).keydown(function (evt) {
 	// Next: f/j/Right
 	if (-1 != [70, 74, 39].indexOf(evt.keyCode)) {
-		o_items.Next();
+		Items.Next();
 	}
 	// Prev: a/k/Left
 	else if (-1 != [65, 75, 37].indexOf(evt.keyCode)) {
-		o_items.Prev();
+		Items.Prev();
 	}
 	// Mark Readed and Next: d/Del
 	else if (-1 != [68, 46].indexOf(evt.keyCode)) {
-		o_items.ReadAndNext();
+		Items.ReadAndNext();
 	}
 	// Toggle item Stared: s
 	else if (-1 != [83].indexOf(evt.keyCode)) {
-		o_items.ToggleStared();
+		Items.ToggleStared();
 	}
 	// Toggle item Readed: u
 	else if (-1 != [85].indexOf(evt.keyCode)) {
-		o_items.ToggleReaded();
+		Items.ToggleReaded();
 	}
 	// Scroll: PageUp
 	else if (-1 != [66].indexOf(evt.keyCode)) {
-		o_items.ScrollPageUp();
+		Items.ScrollPageUp();
 	}
 });
 
 
 /* Load items */
-o_items.Load();
+Items.Load();
 //]]>
 </script>
