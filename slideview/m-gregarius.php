@@ -121,15 +121,19 @@ class Gregarius extends Module {
 	 * Fix invalid html
 	 *
 	 * @param	string	$s_html
+	 * @param	string	$s_baseurl		Use when relative url to absolute url
 	 * @return	string
 	 */
-	public function HtmlFix ($s_html) {
+	public function HtmlFix ($s_html, $s_baseurl) {
 		if (empty($s_html))
 			return '';
 
 		// Use htmLawed
 		if (function_exists('htmLawed')) {
 			$s_rs = htmLawed($s_html, array(
+				// Convert relative url to absolute
+				'abs_url'			=> 1,
+				'base_url'			=> $s_baseurl,
 				// Allow dynamic CSS expression
 				'css_expression'	=> 1,
 				'style_pass'		=> 1,
@@ -231,7 +235,8 @@ class Gregarius extends Module {
 					& RSS_MODE_STICKY_STATE;
 
 				// Purify html in description
-				$ar_t['description'] = $this->HtmlFix($ar_t['description']);
+				$ar_t['description'] = $this->HtmlFix($ar_t['description']
+					, $ar_t['c_siteurl']);
 
 				$ar[] = $ar_t;
 				$rs->MoveNext();
