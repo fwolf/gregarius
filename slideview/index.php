@@ -1,8 +1,8 @@
 <?php
 if (!defined('P2R')) define('P2R', './');
-@include 'fwolflib/fwolflib.php';
+require P2R . 'config.default.php';
 if (!defined('FWOLFLIB'))
-	die('Fwolflib needed, download from http://github.com/fwolf/fwolflib
+	die('Fwlib needed, download from http://github.com/fwolf/fwflib
    		and put in your PHP include path.');
 @include 'smarty/Smarty.class.php';
 if (!class_exists('Smarty'))
