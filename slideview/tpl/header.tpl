@@ -95,6 +95,17 @@
 	article.stared h2:after {
 		content: " " url('../plugins/stickyflag/sticky.png');
 	}
+
+
+  /* For mobile view */
+  @media screen and (max-width: 1024px) {
+    #nav {
+      width: 100%;
+    }
+    article {
+      width: 99%;
+    }
+  }
 	/*]]>*/
 	</style>
 
