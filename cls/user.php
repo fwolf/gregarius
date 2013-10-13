@@ -155,6 +155,7 @@ class RSSUser {
             rss_query($sql);
             if ($this -> _mobileSession) {
             	$this -> setUserSession($uname,$pass);
+                $this -> setUserCookie($uname,$pass);
            	} else {
             	$this -> setUserCookie($uname,$pass);
             }
