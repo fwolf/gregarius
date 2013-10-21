@@ -28,7 +28,7 @@
 
 
 require_once('init.php');
-rss_require('extlib/rss_fetch.inc');
+rss_require('extlib/magpierss/rss_fetch.inc');
 
 define ('ACT_NAV_PREV_PREFIX','&larr;&nbsp;');
 define ('ACT_NAV_SUCC_POSTFIX','&nbsp;&rarr;');
@@ -180,7 +180,7 @@ elseif (array_key_exists('channel',$_REQUEST) || array_key_exists('folder',$_REQ
     $iid= (array_key_exists('iid',$_REQUEST))?sanitize($_REQUEST['iid'],RSS_SANITIZER_NUMERIC):"";
     $fid= (array_key_exists('folder',$_REQUEST))?sanitize($_REQUEST['folder'],RSS_SANITIZER_NUMERIC):"";
     $vfid= (array_key_exists('vfolder',$_REQUEST))?sanitize($_REQUEST['vfolder'],RSS_SANITIZER_NUMERIC):"";
-	
+
     $y= (array_key_exists('y',$_REQUEST))?sanitize($_REQUEST['y'],RSS_SANITIZER_NUMERIC):"0";
     $m= (array_key_exists('m',$_REQUEST))?sanitize($_REQUEST['m'],RSS_SANITIZER_NUMERIC):"0";
     $d= (array_key_exists('d',$_REQUEST))?sanitize($_REQUEST['d'],RSS_SANITIZER_NUMERIC):"0";
@@ -259,7 +259,7 @@ elseif (
 }
 
 // If we have no channel-id something went terribly wrong.
-// Send a 404. 
+// Send a 404.
 if (
     // channel id:
     (
@@ -427,8 +427,8 @@ if (isLoggedIn() && array_key_exists ('metaaction', $_REQUEST)) {
         while(list($cid_) = rss_fetch_row($rs)) {
         	$cids_[]=$cid_;
         }
-        
-        
+
+
         $sql = "update " .getTable('item')
                . " set unread = unread & ".SET_MODE_READ_STATE
                . " where cid  in (" .implode(',', $cids_) . ") ";
@@ -452,7 +452,7 @@ if (isLoggedIn() && array_key_exists ('metaaction', $_REQUEST)) {
             if($fid__ == $fid) {
                 $found = true;
             }
-			
+
 			if( $found || !$first_fid ) {
 				$sql = "select count(*) from " . getTable('item') ." i "
 					   ."inner join " . getTable('channels') ." c on c.id = i.cid "
@@ -460,7 +460,7 @@ if (isLoggedIn() && array_key_exists ('metaaction', $_REQUEST)) {
 				if (hidePrivate()) {
 					$sql .= " and not(i.unread & " . RSS_MODE_PRIVATE_STATE . ")";
 				}
-	
+
 				list($c) = rss_fetch_row(rss_query($sql));
 				//echo "$fid__ -> $c\n";
 
@@ -474,7 +474,7 @@ if (isLoggedIn() && array_key_exists ('metaaction', $_REQUEST)) {
 				}
 			}
         }
-		
+
 		if( !$next_fid && $first_fid )
 			$next_fid = $first_fid;
 
@@ -493,7 +493,7 @@ if (isLoggedIn() && array_key_exists ('metaaction', $_REQUEST)) {
         // virtual folder - code extremely similar to __('Mark These Items as Read')
     case 'ACT_MARK_VFOLDER_READ':
         $vfid = sanitize($_REQUEST['vfolder'],RSS_SANITIZER_NUMERIC);
-        
+
         $rs  = rss_query(
         	"select fid from " .getTable('metatag') . "m  "
         	." where m.ttype = 'channel' and m.tid = $vfid");
@@ -501,8 +501,8 @@ if (isLoggedIn() && array_key_exists ('metaaction', $_REQUEST)) {
         while(list($fid_) = rss_fetch_row($rs)) {
         	$fids_[]=$fid_;
         }
-        
-        $sql = "update " .getTable('item') 
+
+        $sql = "update " .getTable('item')
 	  . " set unread = unread & ".SET_MODE_READ_STATE
 	  . " where cid in (" .implode(',',$fids_). ")";
 
@@ -523,7 +523,7 @@ if (isLoggedIn() && array_key_exists ('metaaction', $_REQUEST)) {
             if ($tid__ == $vfid) {
                 $found = true;
             }
-			
+
 			if( $found || !$first_vfid ) {
 				// check for unread items in next virtual folder
 				$sql = "select count(distinct(i.id)) as cnt from "
@@ -546,7 +546,7 @@ if (isLoggedIn() && array_key_exists ('metaaction', $_REQUEST)) {
 				}
 			}
         }
-		
+
 		if( !$next_vfid && $first_vfid )
 			$next_vfid = $first_vfid;
 
@@ -907,7 +907,7 @@ function doItems($cids,$fid,$vfid,$title,$iid,$y,$m,$d,$nv,$show_what,$show_priv
 		 'm' => month of the prev,next,up item
 		 'd' => day of the prev,next,up item
 		 'cnt' => count of the prev,next,up items for this date
-		 'ts' => unix timestamp of the above 
+		 'ts' => unix timestamp of the above
 		 'url' =>  precomputed uri for the link
 		 'lbl' => precomupted label to be used in the links
  	)
@@ -1176,7 +1176,7 @@ function makeNav($cid,$iid,$y,$m,$d,$fid,$vfid,$cids) {
             break;
 
         case 'feed':
-	
+
             $sql = "select "
                    ." c.id, c.title "
                    ." from " . getTable("channels") ." c "

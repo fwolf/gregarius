@@ -317,8 +317,8 @@ function update($id) {
                 $enclosure = $item['enclosure@url'];
                 // If the enclosure is an image, append it to the content
 				// but only if it isn't there yet
-                if ($enclosure && 
-					array_key_exists('enclosure@type', $item) && 
+                if ($enclosure &&
+					array_key_exists('enclosure@type', $item) &&
 					preg_match('#image/(png|gif|jpe?g)#', $item['enclosure@type']) &&
 					(FALSE == strpos($description,$enclosure))) {
                     	$description = '<img src="'.$enclosure.'" alt="" />' . $description;
@@ -455,7 +455,7 @@ function add_channel($url, $folderid = 0, $title_=null,$descr_=null,$tags = null
     if (!$np) {
         $np = "0";
     }
-			
+
     // Here we go!
     //error_reporting(E_ALL);
     $old_level = error_reporting(E_ERROR);
@@ -557,7 +557,7 @@ function add_channel($url, $folderid = 0, $title_=null,$descr_=null,$tags = null
             if($tags != "") {
                 __exp__submitTag($newid,$tags,"'channel'");
             }
-            
+
             if(false == empty($refreshinterval)) {
             	setProperty($newid, 'rss.config.refreshinterval', $refreshinterval);
 						}
@@ -719,7 +719,7 @@ function getUrl($url, $maxlen = 0) {
         return $c;
     }
 
-    rss_require('extlib/Snoopy.class.inc');
+    rss_require('extlib/magpierss/extlib/snoopy/Snoopy.class.php');
     $client = new Snoopy();
     $client->agent = MAGPIE_USER_AGENT;
     $client->use_gzip = getConfig('rss.output.compression');
@@ -732,10 +732,10 @@ function getUrl($url, $maxlen = 0) {
 }
 
 /**
- * Feed Autodiscovery 
- * 
+ * Feed Autodiscovery
+ *
  * returns an array of all (hopefully) rss/atom/rdf feeds in the document,
- * pointed by $url. 
+ * pointed by $url.
  * See http://diveintomark.org/archives/2002/06/02/important_change_to_the_link_tag
  *
  * @param string $url URL of a web document containing <link> elements
@@ -1093,7 +1093,7 @@ function ETagHandler($key) {
 function eval_mixed_helper($arr) {
     return ("echo stripslashes(\"".addslashes($arr[1])."\");");
 }
- 
+
 function eval_mixed($string) {
     $string = "<? ?>".$string."<? ?>";
     $string = preg_replace("/<\?=\s+(.*?)\s+\?>/", "<? echo $1; ?>", $string);
