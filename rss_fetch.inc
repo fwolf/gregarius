@@ -32,7 +32,7 @@ require_once( MAGPIE_DIR . 'rss_cache.inc' );
 
 // for including 3rd party libraries
 define('MAGPIE_EXTLIB', MAGPIE_DIR . 'extlib' . DIR_SEP);
-require_once( MAGPIE_EXTLIB . 'Snoopy.class.inc');
+require_once( MAGPIE_EXTLIB . 'snoopy/Snoopy.class.php');
 
 
 /*
@@ -263,7 +263,7 @@ function magpie_error ($errormsg="") {
     Purpose:    retrieve an arbitrary remote file
     Input:      url of the remote file
                 headers to send along with the request (optional)
-    Output:     an HTTP response object (see Snoopy.class.inc)
+    Output:     an HTTP response object (see extlib/snoopy/Snoopy.class.php)
 \*=======================================================================*/
 function _fetch_remote_file ($url, $headers = "" ) {
     // Snoopy is an HTTP client in PHP
