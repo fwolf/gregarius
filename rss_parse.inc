@@ -455,8 +455,14 @@ class MagpieRSS {
 
         if ( $this->current_namespace ) {
             if ( $this->initem ) {
-                $this->concat(
-                    $this->current_item[ $this->current_namespace ][ $el ], $text );
+                if (is_string($this->current_item[$this->current_namespace])) {
+                    $this->current_item[$this->current_namespace] .= $text;
+                } else {
+                    $this->concat(
+                        $this->current_item[$this->current_namespace][$el],
+                        $text
+                    );
+                }
             }
             elseif ($this->inchannel) {
                 $this->concat(
