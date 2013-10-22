@@ -30,14 +30,14 @@ define ('_TITLE_', "Gregarius");
 
 
 // Application version
-define ('_VERSION_', "0.6.0");
+define ('_VERSION_', "0.7.0");
 define ('MINUTE',60);
 
 define ('COOKIE_LIFESPAN',60*60*24*999);
 // The useragent used when retrieving the feeds
-define ('MAGPIE_USER_AGENT', "" . _TITLE_ . "/" . _VERSION_ . " (+http://devlog.gregarius.net/docs/ua)");
+define ('MAGPIE_USER_AGENT', "" . _TITLE_ . "/" . _VERSION_ . " (https://github.com/fwolf/gregarius)");
 @ini_set('user_agent',MAGPIE_USER_AGENT);
-	
+
 // feedback
 assert_options(ASSERT_ACTIVE, 1);
 assert_options(ASSERT_WARNING, 1);
@@ -46,7 +46,7 @@ assert_options(ASSERT_QUIET_EVAL, 0);
 
 // default output encoding, can be overrided in the config.
 define ('DEFAULT_OUTPUT_ENCODING', 'UTF-8');
-  
+
 
 // Create a handler function
 function my_assert_handler($file, $line, $code) {
@@ -112,20 +112,20 @@ define ('RSS_MODE_FLAG_STATE', 0x10);
 
 // these are just helpers for the above
 define ('SET_MODE_READ_STATE',
-   RSS_MODE_STICKY_STATE  | 
-   RSS_MODE_PRIVATE_STATE | 
+   RSS_MODE_STICKY_STATE  |
+   RSS_MODE_PRIVATE_STATE |
    RSS_MODE_DELETED_STATE |
    RSS_MODE_FLAG_STATE);
-   
+
 define ('SET_MODE_PUBLIC_STATE',
-   RSS_MODE_UNREAD_STATE  | 
-   RSS_MODE_STICKY_STATE  | 
+   RSS_MODE_UNREAD_STATE  |
+   RSS_MODE_STICKY_STATE  |
    RSS_MODE_DELETED_STATE |
    RSS_MODE_FLAG_STATE);
 
 define ('SET_MODE_AVAILABLE_STATE',
-   RSS_MODE_UNREAD_STATE  | 
-   RSS_MODE_STICKY_STATE  | 
+   RSS_MODE_UNREAD_STATE  |
+   RSS_MODE_STICKY_STATE  |
    RSS_MODE_PRIVATE_STATE |
    RSS_MODE_FLAG_STATE);
 
@@ -141,16 +141,16 @@ define ('SET_MODE_STICKY_STATE',
 
 define ('RSS_STATE_STICKY', 'sticky');
 define ('RSS_STATE_FLAG', 'flag');
-   
+
 // Where do themes and plugins reside?
 define ('RSS_THEME_DIR','themes');
 define ('RSS_PLUGINS_DIR','plugins');
-   
-   
-// Error levels   
+
+
+// Error levels
 define ('RSS_ERROR_ERROR',0);
 define ('RSS_ERROR_WARNING',1);
-define ('RSS_ERROR_NOTICE',2);   
+define ('RSS_ERROR_NOTICE',2);
 
 
 define ('ITEM_SORT_HINT_UNREAD', 0x00);
@@ -179,7 +179,7 @@ define ('RSS_SANITIZER_URL',0x40);
 define('RSS_URI_SEPARATOR','_');
 
 
-// Profiling 
+// Profiling
 //  - The profiling information is "html commented out" at the end of every html page
 //define('PROFILING', 1);
 //define('PROFILING_DB', 1);
