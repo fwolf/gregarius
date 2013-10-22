@@ -100,8 +100,8 @@ _pf(' ... nav.php');
 
 _pf('parsing remaining files...');
 
-rss_require('extlib/rss_fetch.inc');
-rss_require('extlib/rss_utils.inc');
+rss_require('extlib/magpierss/rss_fetch.inc');
+rss_require('extlib/magpierss/rss_utils.inc');
 rss_require('extlib/kses.php');
 rss_require('extlib/Sajax.php');
 rss_require('tags.php');
