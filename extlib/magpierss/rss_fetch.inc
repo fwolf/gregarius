@@ -142,6 +142,7 @@ function fetch_rss ($url, $cache_age=null) {
             if ( isset($rss) and $rss ) {
                 // should be cache age
                 $rss->from_cache = 1;
+                $rss->fetchStatus = 1;
                 if ( MAGPIE_DEBUG > 1) {
                     debug("MagpieRSS: Cache HIT", E_USER_NOTICE);
                 }
@@ -163,7 +164,7 @@ function fetch_rss ($url, $cache_age=null) {
         $resp = _fetch_remote_file( $url, $request_headers );
 
         if (isset($resp) and $resp) {
-          if ($resp->status == '304' ) {
+            if ($resp->status == '304' ) {
                 // we have the most current copy
                 if ( MAGPIE_DEBUG > 1) {
                     debug("Got 304 for $url");
@@ -175,6 +176,7 @@ function fetch_rss ($url, $cache_age=null) {
             elseif ( is_success( $resp->status ) ) {
                 $rss = _response_to_rss( $resp );
                 if ( $rss ) {
+                    $rss->fetchStatus = $resp->status;
                     if (MAGPIE_DEBUG > 1) {
                         debug("Fetch successful");
                     }

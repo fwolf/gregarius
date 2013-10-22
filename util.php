@@ -159,7 +159,7 @@ function update($id) {
         if (!$rss && $id != "" && is_numeric($id)) {
             return array (magpie_error(), array ());
         }
-        elseif (!$rss || !($rss->rss_origin & MAGPIE_FEED_ORIGIN_HTTP_200) ) {
+        elseif (!$rss || (0 > $rss->fetchStatus)) {
             continue; // no need to do anything if we do not get a 200 OK from the feed
         }
 
@@ -410,7 +410,7 @@ function update($id) {
         if ($rss) {
             // when everything went well, return the error code
             // and numer of new items
-            return array ($rss->rss_origin, $updatedIds);
+            return array ($rss->fetchStatus, $updatedIds);
         } else {
             return array (-1, array ());
         }

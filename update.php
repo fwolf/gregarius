@@ -69,13 +69,13 @@ if(array_key_exists('cid', $_GET)) {
 }
 
 $GLOBALS['rss'] -> header = new Header(
-			__('Updating'), 
-			LOCATION_UPDATE, 
-			null, 
-			"", 
+			__('Updating'),
+			LOCATION_UPDATE,
+			null,
+			"",
 			(HDR_NONE | HDR_NO_CACHECONTROL )
 		);
-	
+
 $GLOBALS['rss'] -> feedList = new FeedList(false);
 
 // Instantiate a different Update object, depending on the client
@@ -84,16 +84,16 @@ if ($cline && !$silent && !$newsonly) {
 
 } elseif ($cline && !$silent && $newsonly) {
 	$update = new CommandLineUpdateNews($cid);
-	
+
 } elseif (getConfig('rss.config.serverpush') && !$silent && $browser->supportsServerPush()) {
-	$update = new HTTPServerPushUpdate($cid);	
-	
+	$update = new HTTPServerPushUpdate($cid);
+
 } elseif(!$silent && $browser->supportsAJAX()) {
-	$update = new AJAXUpdate($cid);	
+	$update = new AJAXUpdate($cid);
 
 } elseif($mobile) {
 	$update = new MobileUpdate($cid);
-	
+
 } else {
     error_reporting(0);
     $update = new SilentUpdate($cid);

@@ -57,7 +57,7 @@ if (getConfig('rss.config.ajaxparallelsize')) {
 /**
  * Generic Update. Note that this is an "abstract" class
  * (from the java perspective) as specific sub-classes must
- * override a couple (implicitly) abstract method, such as 
+ * override a couple (implicitly) abstract method, such as
  * render()
  */
 class Update {
@@ -84,7 +84,7 @@ class Update {
         if (hidePrivate() && !$updatePrivateAlso) {
             $sql .= " and not(mode & ".RSS_MODE_PRIVATE_STATE.") ";
         }
-        
+
         if(DEFAULT_CID != $cid) {
         	$sql .= " and c.id = " . $cid . " ";
 				} else {
@@ -119,45 +119,33 @@ class Update {
     }
 
     function magpieError($error) {
-        if (is_numeric($error) && ($error & MAGPIE_FEED_ORIGIN_CACHE)) {
-            if ($error & MAGPIE_FEED_ORIGIN_HTTP_304) {
-                $label = __('OK (304 Not modified)');
-                $cls = ERROR_NOERROR;
-            }
-            elseif ($error & MAGPIE_FEED_ORIGIN_HTTP_TIMEOUT) {
-                $label = __('HTTP Timeout (Local cache)');
-                $cls = ERROR_ERROR;
-            }
-            elseif ($error & MAGPIE_FEED_ORIGIN_NOT_FETCHED) {
-                $label = __('OK (Local cache)');
-                $cls = ERROR_NOERROR;
-            }
-            elseif ($error & MAGPIE_FEED_ORIGIN_HTTP_404) {
-                $label = __('404 Not Found (Local cache)');
-                $cls = ERROR_ERROR;
-            }
-            elseif ($error & MAGPIE_FEED_ORIGIN_HTTP_403) {
-                $label = __('403 Forbidden (Local cache)');
-                $cls = ERROR_ERROR;
-            }
-            else {
-                $label = $error;
-                $cls = ERROR_ERROR;
-            }
-        }
-        elseif ($error & MAGPIE_FEED_ORIGIN_HTTP_200) {
+        if (1 == $error) {
+            $label = __('OK (Local cache)');
+            $cls = ERROR_NOERROR;
+
+        } elseif (200 == $error) {
             $label = __('OK (HTTP 200)');
             $cls = ERROR_NOERROR;
-        }
-        else {
-            if (is_numeric($error)) {
-                $label = __('ERROR') ." $error";
-                $cls = ERROR_ERROR;
-            } else {
-                // shoud contain MagpieError at this point
-                $label = $error;
-                $cls = ERROR_ERROR;
-            }
+
+        } elseif (304 == $error) {
+            $label = __('OK (304 Not modified)');
+            $cls = ERROR_NOERROR;
+
+        } elseif (-100 == $error) {
+            $label = __('HTTP Timeout (Local cache)');
+            $cls = ERROR_ERROR;
+
+        } elseif (404 == $error) {
+            $label = __('404 Not Found (Local cache)');
+            $cls = ERROR_ERROR;
+
+        } elseif (403 == $error) {
+            $label = __('403 Forbidden (Local cache)');
+            $cls = ERROR_ERROR;
+
+        } else {
+            $label = __('ERROR') ." $error";
+            $cls = ERROR_ERROR;
         }
 
         return array( $label, $cls);
@@ -313,7 +301,7 @@ class MobileUpdate extends Update {
     function MobileUpdate($cid) {
         parent::Update($doPopulate = true, $updatePrivateAlso = false, $cid);
     }
-    
+
     function render() {
         $newIds = array();
         foreach ($this->chans as $chan) {
@@ -374,7 +362,7 @@ class CommandLineUpdateNews extends CommandLineUpdate {
 }
 
 /**
- * SilentUpdate updates the feeds silently for those lame 
+ * SilentUpdate updates the feeds silently for those lame
  * browsers out there that do not support HTTP Server Push
  * or AJAX
  */
@@ -470,7 +458,7 @@ function ajaxUpdateJavascript () {
 
 
     /**
-     * main entry point: fetch the different channel ids and launch the 
+     * main entry point: fetch the different channel ids and launch the
      * channel updates. Might want to have this synchronous to be nice on
      * the webserver, not sure whether it can be done with Sajax, though
      */
