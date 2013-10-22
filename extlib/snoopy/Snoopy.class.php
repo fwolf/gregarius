@@ -1044,8 +1044,17 @@ class Snoopy
 					$this->_redirectaddr = $matches[2];
 			}
 
-			if(preg_match("|^HTTP/|",$result_headers[$currentHeader]))
-				$this->response_code = $result_headers[$currentHeader];
+            if (preg_match("|^HTTP/|", $result_headers[$currentHeader])) {
+                $this->response_code = $result_headers[$currentHeader];
+
+                if (preg_match(
+                    "|^HTTP/[^\s]*\s(.*?)\s|",
+                    $result_headers[$currentHeader],
+                    $status
+                )) {
+                    $this->status= $status[1];
+                }
+            }
 
 			$this->headers[] = $result_headers[$currentHeader];
 		}
