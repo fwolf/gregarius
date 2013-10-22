@@ -275,9 +275,17 @@ function _fetch_remote_file ($url, $headers = "" ) {
         $client->rawheaders = $headers;
     }
 
-    @$client->fetch($url);
-    return $client;
+    if (defined('PROXY_HOST')) {
+        // Proxy is enabled
+        $client->proxy_host = PROXY_HOST;
+        $client->proxy_port = PROXY_PORT;
+        $client->_isproxy = true;
+        $client->read_timeout = 0;      // Some proxy is slow
+    }
 
+    @$client->fetch($url);
+
+    return $client;
 }
 
 /*=======================================================================*\
@@ -356,7 +364,7 @@ function init () {
     }
 
     if ( !defined('MAGPIE_OUTPUT_ENCODING') ) {
-        define('MAGPIE_OUTPUT_ENCODING', 'ISO-8859-1');
+        define('MAGPIE_OUTPUT_ENCODING', 'UTF-8');
     }
 
     if ( !defined('MAGPIE_INPUT_ENCODING') ) {
