@@ -82,7 +82,7 @@ class Snoopy
 												// has permission to write to.
 												// under Windows, this should be C:\temp
 
-	var	$curl_path		=	"/usr/local/bin/curl";
+	var	$curl_path		=	"/usr/bin/curl";
 												// Snoopy will use cURL for fetching
 												// SSL content if a full system path to
 												// the cURL binary is supplied here.
