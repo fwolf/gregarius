@@ -195,18 +195,17 @@ class Gregarius extends Module {
 				'c_title'	=> 'c.title',
 				'c_siteurl'	=> 'c.siteurl',
 			),
-			'FROM'		=> array(
-				'i'	=> $this->aCfg['tbl_prefix'] . 'item',
-				'c'	=> $this->aCfg['tbl_prefix'] . 'channels',
-			),
+            // For speed, force item to query before channels
+            'FROM'      => "{$this->aCfg['tbl_prefix']}item AS i " .
+                "LEFT JOIN {$this->aCfg['tbl_prefix']}channels AS c " .
+                "ON (i.cid = c.id " .
+				// Channel not deprecated
+                "AND NOT " . RSS_MODE_DELETED_STATE . " & c.mode)",
 			'WHERE'		=> array(
-				'i.cid = c.id',
 				// Unread only
 				RSS_MODE_UNREAD_STATE . ' & i.unread',
 				// Not deleted
 				'NOT (' . RSS_MODE_DELETED_STATE . ' & i.unread)',
-				// Channel not deprecated
-				'NOT (' . RSS_MODE_DELETED_STATE . ' & c.mode)',
 			),
 			// Same with original Gr, but not good for find start point below
 //			'ORDERBY'	=> 'IFNULL(i.pubdate, i.added) DESC',
