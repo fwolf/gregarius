@@ -297,6 +297,9 @@ function _fetch_remote_file ($url, $headers = "" ) {
     Output:     parsed RSS object (see rss_parse)
 \*=======================================================================*/
 function _response_to_rss ($resp) {
+
+    $resp->results = purifyXml($resp->results);
+
     $rss = new MagpieRSS( $resp->results, MAGPIE_OUTPUT_ENCODING, MAGPIE_INPUT_ENCODING, MAGPIE_DETECT_ENCODING );
 
     // if RSS parsed successfully
@@ -464,6 +467,52 @@ function is_client_error ($sc) {
 \*=======================================================================*/
 function is_server_error ($sc) {
     return $sc >= 500 && $sc < 600;
+}
+
+
+/**
+ * Purify and fix error in RSS
+ *
+ * @param   string  $content
+ * @return  string
+ */
+function purifyXml($content)
+{
+    if (class_exists('tidy')) {
+        // Try tidy first
+        // http://stackoverflow.com/questions/3797100/how-to-repair-malformed-xml
+        $config = array(
+            'indent'     => true,
+            // Remove cdata will fix some RSS, but most doesn't need to
+            'escape-cdata' => false,
+            'input-xml'  => true,
+            'output-xml' => true,
+            'wrap'       => false
+        );
+
+        static $tidy = null;
+        if (is_null($tidy)) {
+            $tidy = new tidy;
+        }
+
+        $tidy->parseString($content, $config);
+        $tidy->cleanRepair();
+
+        $content = strval($tidy);
+
+    } else {
+        // Then try dom recover, will still report error
+        static $dom = null;
+        if (is_null($dom)) {
+            $dom = new DOMDocument;
+            $dom->recover = true;
+        }
+
+        $dom->loadXML($content);
+        $content = $dom->saveXML();
+    }
+
+    return $content;
 }
 
 ?>
