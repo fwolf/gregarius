@@ -75,10 +75,12 @@ function plugins() {
     // Check for updates
     $doUpdates = false;
     $updates = array();
+    /*
     if  (isset($_POST['admin_plugin_check_for_updates'])) {
         $updates = plugins_check_for_updates();
         $doUpdates = true;
     }
+     */
 
 
 
@@ -263,8 +265,8 @@ function getPluginInfo($file) {
 
 /**
 * This function returns an associative array with all the php files that are
-* plugins and their plugin info. 
-* 
+* plugins and their plugin info.
+*
 * Following the wordpress model (and code) we search for plugins in the plugins
 * directory and each subdirectory 1 level deep.
 */

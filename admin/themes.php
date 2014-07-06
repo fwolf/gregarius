@@ -35,11 +35,11 @@ function themes() {
 
     if (isset($_GET['theme']) && array_key_exists($_GET['theme'],$themes)) {
         $active_theme = sanitize($_GET['theme'], RSS_SANITIZER_SIMPLE_SQL |RSS_SANITIZER_NO_SPACES);
-        
+
         $sql = "update " . getTable('config') . " set value_ = '$active_theme'"
                ." where key_='rss.output.theme'";
         rss_query($sql);
-        
+
         rss_invalidate_cache();
     }    else {
         $active_theme= getConfig('rss.output.theme');
@@ -49,10 +49,12 @@ function themes() {
 		  . "<p><input type=\"hidden\" name=\"".CST_ADMIN_DOMAIN."\" value=\"".CST_ADMIN_DOMAIN_THEMES."\" />\n"
 	  	."<input type=\"submit\" name=\"admin_themes_check_for_updates\" value=\"".__('Check for Updates')."\" /></p>\n"
 	  	. "</form>\n";
+    /*
 		if (isset($_POST['admin_themes_check_for_updates'])) {
 			theme_getThemesUpdate($themes);
 		}
-    
+     */
+
     echo "<h2 class=\"trigger\">".__('Themes')."</h2>\n"
     ."<div id=\"admin_themes\" >\n";
     echo __('<p style="font-size:small">Themes are made of a set of template files which specify how your Gregarius installation looks.<br />More themes can be downloaded from the <a style="text-decoration:underline"  href="http://themes.gregarius.net/">Themes Repository</a>.</p>');
@@ -74,12 +76,12 @@ function themes() {
         } else {
             $screenshotURL = "<img src=\"". getPath() . RSS_THEME_DIR . "/default/media/noscreenshot.png\" />";
         }
-        $h4="$name"; 
+        $h4="$name";
         $h5="By&nbsp;$author | Version:&nbsp;$version";
         if ($updateAvailable) {
         	$h5 .= ' | <a class="update" href="'.$theme['updateUrl'].'">Update to version ' .$theme['updateVersion'] .'</a>';
         }
-        
+
         if ($htmltheme) {
             $seturl = "index.php?view=themes&amp;theme=$entry";
         } else {
@@ -100,7 +102,7 @@ function themes() {
                     ."\">" . __('Configure') . "</a>";
         echo "<h5>$h5</h5>\n"
             ."<p class=\"themescreenshot\">$screenshotURL</p>"
-            ."<p>$description</p>&nbsp;"            
+            ."<p>$description</p>&nbsp;"
             ."</span></div>\n";
     }
 
@@ -182,8 +184,8 @@ function theme_options() {
     }
 }
 
-// we take the array that's input, and return an array as if it had been selected 
-// from the config table and dumped out using rss_fetch_assoc.  This means the 
+// we take the array that's input, and return an array as if it had been selected
+// from the config table and dumped out using rss_fetch_assoc.  This means the
 // theme author does not have to pass anything more than key_ in his input array.
 // If $key is not null we query and return only that item, otherwise we fill
 // an array to match the entire input array
@@ -192,12 +194,12 @@ function theme_options_fill_override_array($theme, $media, $array_input, $key=nu
     if( !is_array( $array_input ) ) {
         $array_input = split( ",", $array_input );
     }
-    
+
     foreach( $array_input as $inp ) {
         if( !is_array( $inp ) && isset( $inp ) ) {
             $inp = array( 'key_' => $inp );
         }
-        
+
         if( isset( $inp['key_'] ) ) {
             $thisret = array();
             if( $key === null || $key === $inp['key_'] ) {
@@ -211,11 +213,11 @@ function theme_options_fill_override_array($theme, $media, $array_input, $key=nu
                         $thisret['desc_'] = 'The color scheme to use.';
                     if( !isset( $inp['export_'] ) )
                         $thisret['export_'] = '';
-                        
+
                     $value = rss_theme_config_override_option($thisret['key_'], $thisret['default_'], $theme, $media);
                     $value = array_pop( explode( ',', $value ) );
                     $thisret['value_'] = implode(',', $schemes ) . "," . $value;
-                    
+
                 } else {
                     $sql = "select * from " .getTable("config") ." where key_ like
                            '" . $inp['key_'] . "'";
@@ -231,7 +233,7 @@ function theme_options_fill_override_array($theme, $media, $array_input, $key=nu
                             }
                         }
                     }
-                    
+
                     $thisret['value_'] = rss_theme_config_override_option($thisret['key_'], $thisret['default_'], $theme, $media);
                 }
 
@@ -244,7 +246,7 @@ function theme_options_fill_override_array($theme, $media, $array_input, $key=nu
             rss_error('rss_theme_options_configure_overrides was passed an item with no key_', RSS_ERROR_ERROR,true);
         }
     }
-    
+
     return $ret;
 }
 
@@ -270,7 +272,7 @@ function rss_theme_options_configure_overrides($theme, $media, $config_items) {
 	} else if (isset($_REQUEST['action'])) {
 		$action = $_REQUEST['action'];
 	}
-	
+
 	if( isset( $_REQUEST['mediaparam'] ) && $media === sanitize($_REQUEST['mediaparam'], RSS_SANITIZER_CHARACTERS) ) {
 		if (array_key_exists(CST_ADMIN_CONFIRMED,$_POST) && $_POST[CST_ADMIN_CONFIRMED] == __('Yes')) {
 			if (!array_key_exists('key',$_REQUEST)) {
@@ -296,11 +298,11 @@ function rss_theme_options_configure_overrides($theme, $media, $config_items) {
 					rss_error('Invalid config value specified.', RSS_ERROR_ERROR,true);
 					break;
 				}
-				
+
 				$key = sanitize($_REQUEST['key'],RSS_SANITIZER_NO_SPACES|RSS_SANITIZER_SIMPLE_SQL);
 				$type = sanitize($_POST['type'],RSS_SANITIZER_CHARACTERS);
 				$value = sanitize($_POST['value'], RSS_SANITIZER_SIMPLE_SQL);
-	
+
 				if( $type == 'enum' ) {
 					$item = theme_options_fill_override_array($theme,$media,$config_items,$key);
 					if( count( $item ) ) {
@@ -323,9 +325,9 @@ function rss_theme_options_configure_overrides($theme, $media, $config_items) {
 				} else {
 					rss_theme_set_config_override_option($key, $value, $theme, $media);
 				}
-	
+
 				break;
-				
+
 			default:
 				rss_error('Invalid config action specified.', RSS_ERROR_ERROR,true);
 				break;
@@ -333,7 +335,7 @@ function rss_theme_options_configure_overrides($theme, $media, $config_items) {
 			$action = null; //redirect to our theme's admin page
 		}
     }
-    
+
     switch ($action) {
     case CST_ADMIN_DEFAULT_ACTION:
     case 'CST_ADMIN_DEFAULT_ACTION':
@@ -352,7 +354,7 @@ function rss_theme_options_configure_overrides($theme, $media, $config_items) {
 			}
 		}
         break;
-        
+
     case CST_ADMIN_EDIT_ACTION:
     case 'CST_ADMIN_EDIT_ACTION':
         if( isset( $_REQUEST['mediaparam'] ) && $media === sanitize($_REQUEST['mediaparam'], RSS_SANITIZER_CHARACTERS) ) {
@@ -369,7 +371,7 @@ function rss_theme_options_configure_overrides($theme, $media, $config_items) {
 			}
 		}
 		break;
-        
+
     default:
         $caption = "Configuration overrides";
         if( isset( $media ) ) {
@@ -384,7 +386,7 @@ function rss_theme_options_configure_overrides($theme, $media, $config_items) {
         }
 
         config_table_footer();
-        
+
         //no buttons here
         rss_theme_options_rendered_buttons(true);
 

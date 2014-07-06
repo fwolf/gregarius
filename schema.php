@@ -32,25 +32,25 @@ require_once('cls/l10n.php');
 /**
  * Checks the db schema for the for all required tables, adds those which are missing.
  * Returns the number of added tables;
- */ 
+ */
 function checkSchema() {
-	
+
 	$missing_tables = array();
 	$actual_tables=array();
 	$expected_tables = getExpectedTables();
-	
+
 	$rs = rss_query( "show tables", true, true );
 	while(list($tbl) = rss_fetch_row($rs)) {
 		$actual_tables[]=$tbl;
 	}
-	
+
 	foreach ($expected_tables as $base => $tbl) {
 		$exists = array_search($tbl,$actual_tables);
 		if ($exists === FALSE || $exists === NULL) {
 			$missing_tables[]=$base;
 		}
 	}
-	
+
 	$updated  = 0;
 	if (count($missing_tables) > 0) {
 		$msg = (count($actual_tables)?"Updating":"Creating")
@@ -60,9 +60,9 @@ function checkSchema() {
 		rss_error($msg, RSS_ERROR_WARNING);
 
 		foreach($missing_tables as $table) {
-			$updated += call_user_func("_init_$table"); 
+			$updated += call_user_func("_init_$table");
 		}
-		
+
 		if ($updated == count($missing_tables)) {
 			rss_error(__("Successfully created $updated of $updated database tables!"), RSS_ERROR_NOTICE);
 		} else {
@@ -71,7 +71,7 @@ function checkSchema() {
 			. count($missing_tables) ." tables could not be created!",RSS_ERROR_ERROR);
 		}
 	}
-	
+
 	if ($updated) {
 		rss_invalidate_cache();
 	}
@@ -88,7 +88,7 @@ $expected_tables = array (
 		"tag" => trim(getTable("tag")),
 		"rating" => trim(getTable("rating")),
 		"cache" => trim(getTable("cache")),
-		"users" => trim(getTable("users")),		
+		"users" => trim(getTable("users")),
 		"dashboard" => trim(getTable("dashboard")),
 		"properties" => trim(getTable("properties")),
 
@@ -105,7 +105,7 @@ function rss_query_wrapper($query, $dieOnError=true, $preventRecursion=false) {
 }
 
 /**
- * this function handles specific schema updates that occurred 
+ * this function handles specific schema updates that occurred
  * during version updates.
  *
  * @return the number of updated tables
@@ -190,7 +190,7 @@ function checkSchemaColumns($column) {
 					. rss_sql_error_message(), RSS_ERROR_ERROR);
 			}
 		break;
-		
+
 		case 'm.tdate':
 		case 'tdate':
 			// tag date
@@ -216,7 +216,7 @@ function checkSchemaColumns($column) {
 					. rss_sql_error_message(), RSS_ERROR_ERROR);
 			}
 		break;
-		
+
 		case 'userips':
 		case 'i.userips':
 		// users.userips: list of valid IP subnets the user has logged in from
@@ -229,8 +229,8 @@ function checkSchemaColumns($column) {
 					. rss_sql_error_message(), RSS_ERROR_ERROR);
 			}
 		break;
-		
-		
+
+
 		case 'i.md5sum':
 		case 'md5sum':
 			// md5check on an item - added in 0.5.3
@@ -255,7 +255,7 @@ function checkSchemaColumns($column) {
 				rss_error('Failed updating schema for table ' . getTable('item') . ': '
 					. rss_sql_error_message(), RSS_ERROR_ERROR);
 			}
-		
+
 		break;
 	}
 	return $updated;
@@ -286,7 +286,7 @@ function _init_channels() {
 			mode int(16) NOT NULL default '1',
   			PRIMARY KEY  (id),
 			KEY url (url)
-		) TYPE=MyISAM;    
+		) TYPE=MyISAM;
 _SQL_
 );
 
@@ -313,7 +313,7 @@ function _init_dashboard() {
   			daterefreshed datetime default NULL,
   			itemcount tinyint(1) NOT NULL default 3,
   			PRIMARY KEY  (id)
-		) TYPE=MyISAM;    
+		) TYPE=MyISAM;
 _SQL_
 );
 
@@ -322,8 +322,9 @@ _SQL_
 		rss_error('The ' . $table . 'table doesn\'t exist and I couldn\'t create it! Please create it manually.', RSS_ERROR_ERROR);
 		return 0;
 	}
-	
-	
+
+
+    /*
 	$baseData = array(
 		array ('Latest Gregarius News','http://devlog.gregarius.net/feed/?db=',0, 3),
 		array ('Latest Plugins','http://plugins.gregarius.net/rss.php?db=',1, 5),
@@ -336,16 +337,17 @@ _SQL_
 		list($title,$url,$pos, $cnt) = $feed;
 		rss_query_wrapper (
 			"INSERT INTO $table (title, url, position, obj, daterefreshed, itemcount) VALUES "
-			." ('$title', '$url', '$pos', '', null, $cnt)"	, false, true);	
+			." ('$title', '$url', '$pos', '', null, $cnt)"	, false, true);
 		if (!rss_is_sql_error(RSS_SQL_ERROR_NO_ERROR)) {
 			rss_error('The '  . $table .  ' table was created successfully, but I couldn\'t insert the default values. Please do so manually!', RSS_ERROR_ERROR);
 			return 0;
-		}	
+		}
 	}
-	
+     */
+
 	return 1;
-	
-	
+
+
 }
 
 
@@ -358,10 +360,10 @@ function _init_folders() {
 		CREATE TABLE __table__ (
 		  id tinyint(11) NOT NULL auto_increment,
 		  name varchar(127) NOT NULL default '',
-		  position int(11) NOT NULL default '0',    
+		  position int(11) NOT NULL default '0',
 		  PRIMARY KEY  (id),
 		  UNIQUE KEY name (name)
-		) TYPE=MyISAM;    
+		) TYPE=MyISAM;
 _SQL_
 );
 
@@ -370,8 +372,8 @@ _SQL_
 		rss_error('The ' . $table . 'table doesn\'t exist and I couldn\'t create it! Please create it manually.', RSS_ERROR_ERROR);
 		return 0;
 	}
-	
-	
+
+
 	rss_query_wrapper ("INSERT INTO $table (id,name) VALUES (0,'')", false, true);
 	if (!rss_is_sql_error(RSS_SQL_ERROR_NO_ERROR)) {
 		rss_error('The '  . $table .  ' table was created successfully, but I couldn\'t insert the default values. Please do so manually!', RSS_ERROR_ERROR);
@@ -391,9 +393,9 @@ _SQL_
 /** Config table */
 function _init_config() {
 	$cfg_table = getTable('config');
-	
+
 	rss_query_wrapper ('DROP TABLE IF EXISTS ' . $cfg_table, true, true);
-	
+
 	$sql_create = str_replace('__config__',$cfg_table, <<< _SQL_
 		CREATE TABLE __config__ (
 			     key_ varchar(127) NOT NULL default '',
@@ -413,7 +415,7 @@ _SQL_
 		return 0;
 	}
 
-	
+
 	return (setDefaults(null)?1:0);
 }
 
@@ -464,24 +466,24 @@ function setDefaults($key) {
 		"rss.config.deadthreshhold"	=>	array('24', '24', 'num', 'Sets the threshold for when a feed is marked as dead, in hours', NULL),
 		"rss.search.maxitems" => array(500, 500, 'num', 'Sets the maximum number of items returned on a search', NULL),
 		"rss.config.restrictrefresh"    => array("false","false","boolean","Restrict refresh to command line only (eg php -f update.php). Useful for busy sites with multiple users.",NULL),
-		"rss.output.minimalchannellist" => array('false','false','boolean','Exclude folders and channels without unread items in channel list?',NULL), 
+		"rss.output.minimalchannellist" => array('false','false','boolean','Exclude folders and channels without unread items in channel list?',NULL),
 	);
-	
-	
+
+
 	// just send in all config entry again, ignore duplicate row errors
 	$atLeastOneIn = false;
 	foreach($defaults as $k=>$vs) {
 		list($v,$d,$t,$ds,$e) = $vs;
 	    $ds=rss_real_escape_string($ds);
 	    $e=rss_real_escape_string($e);
-		rss_query_wrapper('insert into '. getTable('config') 
+		rss_query_wrapper('insert into '. getTable('config')
 			. "(key_,value_,default_,type_,desc_,export_) VALUES ("
 			. "'$k','$v','$d','$t','$ds'," .($e?"'$e'":"null") .")",false,true);
 		if (rss_is_sql_error(RSS_SQL_ERROR_NO_ERROR)) {
 
 			$atLeastOneIn = true;
 		}
-		
+
 	}
 	return $atLeastOneIn;
 }
@@ -504,13 +506,13 @@ function _init_item() {
 		  description text,
 		  unread tinyint(4) default '1',
 		  pubdate datetime default NULL,
-		  author varchar(255) default NULL,		  
+		  author varchar(255) default NULL,
 		  PRIMARY KEY  (id),
 		  KEY url (url),
 		  KEY guid(guid(10)),
 		  KEY cid (cid),
 		  KEY author (author)
-		) TYPE=MyISAM;    
+		) TYPE=MyISAM;
 _SQL_
 );
 
@@ -531,11 +533,11 @@ function _init_tag() {
 	$sql_create = str_replace('__table__',$table, <<< _SQL_
 		CREATE TABLE __table__ (
 			id bigint(16) NOT NULL auto_increment,
-			tag varchar(63) NOT NULL default '',                    
+			tag varchar(63) NOT NULL default '',
 			PRIMARY KEY  (id),
 		 	UNIQUE KEY tag (tag),
 			KEY id (id)
-		) TYPE=MyISAM;    
+		) TYPE=MyISAM;
 _SQL_
 );
 
@@ -556,13 +558,13 @@ function _init_metatag() {
 	rss_query_wrapper ('DROP TABLE IF EXISTS ' . $table, true, true);
 	$sql_create = str_replace('__table__',$table, <<< _SQL_
 		CREATE TABLE __table__ (
-			fid bigint(16) NOT NULL default '0',                    
-			tid bigint(16) NOT NULL default '0', 
-			ttype enum('item','folder','channel') NOT NULL default 'item', 
-			KEY fid (fid), 
+			fid bigint(16) NOT NULL default '0',
+			tid bigint(16) NOT NULL default '0',
+			ttype enum('item','folder','channel') NOT NULL default 'item',
+			KEY fid (fid),
 			KEY tid (tid),
 			KEY ttype (ttype)
-		) TYPE=MyISAM;    
+		) TYPE=MyISAM;
 _SQL_
 );
 
@@ -615,20 +617,20 @@ _SQL_
 );
 
 	rss_query_wrapper($sql_create, false, true);
-	
 
-	
+
+
 	if (!rss_is_sql_error(RSS_SQL_ERROR_NO_ERROR)) {
 		rss_error('The ' . $table . 'table doesn\'t exist and I couldn\'t create it! Please create it manually.', RSS_ERROR_ERROR);
 		return 0;
 	} else {
 
-		rss_query_wrapper ("INSERT INTO $table (cachekey,timestamp,cachetype,data) VALUES ('data_ts',now(),'ts',null)", false, true);	
+		rss_query_wrapper ("INSERT INTO $table (cachekey,timestamp,cachetype,data) VALUES ('data_ts',now(),'ts',null)", false, true);
 		if (!rss_is_sql_error(RSS_SQL_ERROR_NO_ERROR)) {
 			rss_error('The '  . $table .  ' table was created successfully, but I couldn\'t insert the default values. Please do so manually!', RSS_ERROR_ERROR);
 			return 0;
 		}
-	
+
 		return 1;
 	}
 }
@@ -641,34 +643,34 @@ function _init_users() {
 	$sql_create = str_replace('__table__',$table, <<< _SQL_
 		CREATE TABLE __table__ (
 		  uid bigint(16) NOT NULL auto_increment,
-		  uname varchar(255) NOT NULL,		  
-		  password varchar(255) NOT NULL,		  
-		  ulevel bigint(11) NOT NULL default '1',		  
-		  realname varchar(255) default NULL,		  		  
-		  lastip varchar(255) default NULL,		  		  		  
-		  userips TEXT default '',		  
+		  uname varchar(255) NOT NULL,
+		  password varchar(255) NOT NULL,
+		  ulevel bigint(11) NOT NULL default '1',
+		  realname varchar(255) default NULL,
+		  lastip varchar(255) default NULL,
+		  userips TEXT default '',
 		  lastlogin datetime NULL default '0000-00-00 00:00:00',
 		  PRIMARY KEY  (uid),
 		  KEY (uname)
-		) TYPE=MyISAM;  
+		) TYPE=MyISAM;
 _SQL_
 );
 
 	rss_query_wrapper($sql_create, false, true);
-	
 
-	
+
+
 	if (!rss_is_sql_error(RSS_SQL_ERROR_NO_ERROR)) {
 		rss_error('The ' . $table . 'table doesn\'t exist and I couldn\'t create it! Please create it manually.', RSS_ERROR_ERROR);
 		return 0;
 	} else {
 
-		rss_query_wrapper ("INSERT INTO $table (uname,password,ulevel,realname) VALUES ('admin','',99,'Administrator')", false, true);	
+		rss_query_wrapper ("INSERT INTO $table (uname,password,ulevel,realname) VALUES ('admin','',99,'Administrator')", false, true);
 		if (!rss_is_sql_error(RSS_SQL_ERROR_NO_ERROR)) {
 			rss_error('The '  . $table .  ' table was created successfully, but I couldn\'t insert the default values. Please do so manually!', RSS_ERROR_ERROR);
 			return 0;
 		}
-	
+
 		return 1;
 	}
 }
@@ -685,7 +687,7 @@ function _init_properties() {
 		  property varchar(128) NOT NULL default '',
 		  value text NOT NULL
 		) TYPE=MyISAM;
-		
+
 _SQL_
 );
 
@@ -714,7 +716,7 @@ if (isset($argv) && in_array('--dump',$argv)) {
 	}
 	define ('DUMP_SCHEMA', true);
 	define ('RSS_NO_CACHE',true);
-	define ('RSS_NO_DB',true);	
+	define ('RSS_NO_DB',true);
 	if (!defined('PROFILING')) {define ('PROFILING', false);}
 	require_once('db.php');
 	if (!function_exists('rss_require')) {
@@ -737,12 +739,12 @@ if (isset($argv) && in_array('--dump',$argv)) {
 
 
 	foreach (getExpectedTables() as $tbl => $dummy) {
-	 	call_user_func("_init_$tbl"); 
+	 	call_user_func("_init_$tbl");
 	}
 	// shamelessly copied from install.php
-		
+
 		$fp = $stdOut ? FALSE : @fopen(DBSTRUCT, 'w');
-		
+
 		if(!$fp) {
 			// unable to open file for writing
 			echo($out);
