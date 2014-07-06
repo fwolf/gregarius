@@ -202,8 +202,11 @@ class Snoopy
 				    if (!is_executable($this->curl_path))
 				        return false;
 				$this->host = $URI_PARTS["host"];
-				if(!empty($URI_PARTS["port"]))
+				if(!empty($URI_PARTS["port"])) {
 					$this->port = $URI_PARTS["port"];
+                } else {
+                    $this->port = 443;
+                }
 				if($this->_isproxy)
 				{
 					// using proxy, send entire URI
