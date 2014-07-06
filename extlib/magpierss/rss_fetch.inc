@@ -482,13 +482,14 @@ function purifyXml($content)
         // Try tidy first
         // http://stackoverflow.com/questions/3797100/how-to-repair-malformed-xml
         $config = array(
-            'indent'     => true,
+            'indent'        => true,
             // Remove cdata, maybe magpierss not recoginize it, and will
             // report invalid character error.
-            'escape-cdata' => true,
-            'input-xml'  => true,
-            'output-xml' => true,
-            'wrap'       => false
+            'escape-cdata'  => true,
+            'char-encoding' => 'utf8',
+            'input-xml'     => true,
+            'output-xml'    => true,
+            'wrap'          => false
         );
 
         static $tidy = null;
