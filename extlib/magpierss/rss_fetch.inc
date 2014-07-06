@@ -483,8 +483,9 @@ function purifyXml($content)
         // http://stackoverflow.com/questions/3797100/how-to-repair-malformed-xml
         $config = array(
             'indent'     => true,
-            // Remove cdata will fix some RSS, but most doesn't need to
-            'escape-cdata' => false,
+            // Remove cdata, maybe magpierss not recoginize it, and will
+            // report invalid character error.
+            'escape-cdata' => true,
             'input-xml'  => true,
             'output-xml' => true,
             'wrap'       => false
