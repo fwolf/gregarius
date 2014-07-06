@@ -956,7 +956,7 @@ class Snoopy
 		if(!empty($this->agent))
 			$headers[] = "User-Agent: ".$this->agent;
 		if(!empty($this->host))
-			if(!empty($this->port))
+			if(!empty($this->port) && 443 != $this->port)
 				$headers[] = "Host: ".$this->host.":".$this->port;
 			else
 				$headers[] = "Host: ".$this->host;
