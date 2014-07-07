@@ -478,6 +478,13 @@ function is_server_error ($sc) {
  */
 function purifyXml($content)
 {
+    // Remove BOM first
+    $content = trim($content);
+    if ('<' != $content{0}) {
+        $content = substr($content, 3);
+    }
+
+
     if (class_exists('tidy')) {
         // Try tidy first
         // http://stackoverflow.com/questions/3797100/how-to-repair-malformed-xml
