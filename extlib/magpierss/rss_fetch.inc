@@ -493,13 +493,18 @@ function purifyXml($content)
     // &#8220; will be replaced to ^\
     // &#8221; will be replaced to ^]
     // &#8230; will be replaced to &
+    $map = array(
+        '&#169;'  => '©',
+        '&#187;', => '»',
+        '&#8211;' => '-',
+        '&#8212;' => '-',
+        '&#8220;' => '“',
+        '&#8221;' => '”',
+        '&#8230;' => '…',
+    );
     $content = str_replace(
-        array(
-            '&#169;', '&#187;', '&#8211;', '&#8212;', '&#8220;', '&#8221;', '&#8230;',
-        ),
-        array(
-            '©', '»', '-', '-', '“', '”', '…',
-        ),
+        array_keys($map),
+        array_values($map),
         $content
     );
 
