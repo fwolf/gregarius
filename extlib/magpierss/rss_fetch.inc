@@ -485,11 +485,13 @@ function purifyXml($content)
     }
 
 
-    // Remove invalid character
-    // &#8211; will be replace to ^S in tidy
+    // Remove invalid character will cause chaos in tidy
+    // &#8211; will be replaced to ^S
+    // &#8220; will be replaced to ^\
+    // &#8221; will be replaced to ^]
     $content = str_replace(
-        array('&#8211;'),
-        array('-'),
+        array('&#8211;', '&#8220;', '&#8221;'),
+        array('-', '“', '”'),
         $content
     );
 
