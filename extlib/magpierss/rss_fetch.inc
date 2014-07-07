@@ -490,14 +490,18 @@ function purifyXml($content)
     // &#187; will be replaced to <BB>
     // &#8211; will be replaced to ^S
     // &#8212; will be replaced to ^T
+    // &#8216; will be replaced to ^X
+    // &#8217; will be replaced to ^Y
     // &#8220; will be replaced to ^\
     // &#8221; will be replaced to ^]
     // &#8230; will be replaced to &
     $map = array(
         '&#169;'  => '©',
-        '&#187;', => '»',
+        '&#187;'  => '»',
         '&#8211;' => '-',
         '&#8212;' => '-',
+        '&#8216;' => '‘',
+        '&#8217;' => '’',
         '&#8220;' => '“',
         '&#8221;' => '”',
         '&#8230;' => '…',
