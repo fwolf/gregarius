@@ -487,6 +487,7 @@ function purifyXml($content)
 
     // Remove invalid character will cause chaos in tidy
     // &#169; will be replaced to <A9>
+    // &#183; will be replaced to <B7>
     // &#187; will be replaced to <BB>
     // &#8211; will be replaced to ^S
     // &#8212; will be replaced to ^T
@@ -498,6 +499,7 @@ function purifyXml($content)
     $map = array(
         '&#169;'  => '©',
         '&#187;'  => '»',
+        '&#183;'  => '·',
         '&#8211;' => '-',
         '&#8212;' => '-',
         '&#8216;' => '‘',
