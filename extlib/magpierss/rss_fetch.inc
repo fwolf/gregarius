@@ -486,14 +486,15 @@ function purifyXml($content)
 
 
     // Remove invalid character will cause chaos in tidy
+    // &#187; will be replaced to <BB>
     // &#8211; will be replaced to ^S
     // &#8212; will be replaced to ^T
     // &#8220; will be replaced to ^\
     // &#8221; will be replaced to ^]
     // &#8230; will be replaced to &
     $content = str_replace(
-        array('&#8211;', '&#8212;', '&#8220;', '&#8221;', '&#8230;'),
-        array('-', '-', '“', '”', '…'),
+        array('&#187;', '&#8211;', '&#8212;', '&#8220;', '&#8221;', '&#8230;'),
+        array('»', '-', '-', '“', '”', '…'),
         $content
     );
 
