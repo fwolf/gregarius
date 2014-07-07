@@ -485,6 +485,15 @@ function purifyXml($content)
     }
 
 
+    // Remove invalid character
+    // &#8211; will be replace to ^S in tidy
+    $content = str_replace(
+        array('&#8211;'),
+        array('-'),
+        $content
+    );
+
+
     if (class_exists('tidy')) {
         // Try tidy first
         // http://stackoverflow.com/questions/3797100/how-to-repair-malformed-xml
