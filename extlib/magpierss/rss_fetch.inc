@@ -486,7 +486,9 @@ function purifyXml($content)
             // Remove cdata, maybe magpierss not recoginize it, and will
             // report invalid character error.
             'escape-cdata'  => true,
-            'char-encoding' => 'utf8',
+            //'char-encoding' => 'utf8',
+            'input-encoding' => 'raw',
+            'output-encoding' => 'utf8',
             'input-xml'     => true,
             'output-xml'    => true,
             'wrap'          => false
