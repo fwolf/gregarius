@@ -486,6 +486,7 @@ function purifyXml($content)
 
 
     // Remove invalid character will cause chaos in tidy
+    // &#169; will be replaced to <A9>
     // &#187; will be replaced to <BB>
     // &#8211; will be replaced to ^S
     // &#8212; will be replaced to ^T
@@ -493,8 +494,12 @@ function purifyXml($content)
     // &#8221; will be replaced to ^]
     // &#8230; will be replaced to &
     $content = str_replace(
-        array('&#187;', '&#8211;', '&#8212;', '&#8220;', '&#8221;', '&#8230;'),
-        array('»', '-', '-', '“', '”', '…'),
+        array(
+            '&#169;', '&#187;', '&#8211;', '&#8212;', '&#8220;', '&#8221;', '&#8230;',
+        ),
+        array(
+            '©', '»', '-', '-', '“', '”', '…',
+        ),
         $content
     );
 
