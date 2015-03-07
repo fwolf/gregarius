@@ -47,7 +47,7 @@ class RSSUser {
     /** List of valid IP subnets this user is allowed to log in via a cookie */
     var $_validIPs;
     /** Mobile session */
-    var $_mobileSession;
+    var $_mobileSession = true;
     /** Action */
     var $_action;
 		/** Show private feeds/items */
@@ -70,9 +70,6 @@ class RSSUser {
         $this -> _hash = null;
 				$this -> _showPrivate = 0;
 
-
-		$this -> _mobileSession =
-			isset($_POST['media']) && 'mobile' == $_POST['media'];
 
 		if ('mobile' ==  getThemeMedia()) {
 			@ini_set('session.use_trans_sid',true);
@@ -104,7 +101,6 @@ class RSSUser {
         }
         elseif(isset($_SESSION['mobile'])) {
             list($cuname,$chash) = explode('|',$_SESSION['mobile']);
-            $this -> _mobileSession = true;
             $this -> _action = RSS_USER_ACTION_SESSION;
         }
         if ($cuname && $chash) {
